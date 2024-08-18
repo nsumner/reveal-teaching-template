@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>reveal.js</title>
+
+    <link rel="stylesheet" href="../../dist/reset.css">
+    <link rel="stylesheet" href="../../dist/reveal.css">
+    <link rel="stylesheet" href="../../dist/theme/teaching.css">
+
+    <!-- Theme used for syntax highlighted code -->
+    <link rel="stylesheet" href="../../plugin/highlight/idea.css">
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <section data-markdown="slides.md"></section>
+      </div>
+    </div>
+
+    <script src="../../dist/reveal.js"></script>
+    <script src="../../plugin/notes/notes.js"></script>
+    <script src="../../plugin/markdown/markdown.js"></script>
+    <script src="../../plugin/highlight/highlight.js"></script>
+    <script src="../../plugin/tracing/plugin.js"></script>
+    <script src="../../plugin/teaching/plugin.js"></script>
+    <script>
+      Reveal.initialize({
+        hash: true,
+
+        // Learn about plugins: https://revealjs.com/plugins/
+        plugins: [ RevealMarkdown, RevealHighlight, RevealTeaching ],
+
+        // always show flattened slide numbers
+        slideNumber: "c/t",
+        showSlideNumber: 'all',
+
+        // Enable and customize navigation controls
+        controls: false,
+        keyboard: true,
+        mouseWheel: false, // We may need wheels inside slides. Be consistent.
+        fragmentInURL: true,
+
+        // Slide & style defaults
+        width: 1280, // 16x9 resolution
+        height: 720,
+        center: false, // vertical centering
+        fragments: true,
+        transition: 'none',
+        transitionSpeed: 'fast'
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,431 @@
+/**
+ * White theme for reveal.js. This is the opposite of the 'black' theme.
+ *
+ * By Hakim El Hattab, http://hakim.se
+ */
+
+
+// Default mixins and settings -----------------
+@import "../template/mixins";
+@import "../template/settings";
+// ---------------------------------------------
+
+
+// Include theme-specific fonts
+//@import url(./fonts/source-sans-pro/source-sans-pro.css);
+
+
+// Override theme settings (see ../template/settings.scss)
+$backgroundColor: #fff;
+
+$mainFont: 'Carlito', sans-serif;
+$mainColor: #222;
+$headingColor: #000080;
+
+$mainFontSize: 42px;
+$mainFont: 'Carlito', Helvetica, sans-serif;
+$headingFont: 'Carlito', Helvetica, sans-serif;
+$headingTextShadow: none;
+$headingLetterSpacing: normal;
+$headingTextTransform: normal;
+$headingFontWeight: 400;
+$linkColor: #2a76dd;
+$linkColorHover: lighten( $linkColor, 15% );
+$selectionBackgroundColor: lighten( $linkColor, 25% );
+
+$heading1Size: 2.5em;
+$heading2Size: 1.6em;
+$heading3Size: 1.3em;
+$heading4Size: 1.0em;
+
+// Change text colors against dark slide backgrounds
+@include dark-bg-text-color(#fff);
+
+
+// Theme template ------------------------------
+@import "../template/theme";
+// ---------------------------------------------
+
+.reveal .slides {
+  width: 100%;
+  text-align: left;
+}
+
+.reveal .slides > section.present,
+.reveal .slides > section > section.present {
+  min-height: 100% !important;
+  width: 100%;
+  position: absolute !important;
+  top: 0 !important;
+}
+
+
+/*********************************************
+ * Title slide formatting
+ *********************************************/
+
+// We use the presence of h1 as an indicator of the main title page.
+.reveal .present:has(h1) h3 {
+  color: #000000;
+  width: 100%;
+  text-align: center;
+}
+// An h3 following an h1 must be the footer of the main title page.
+.reveal .present h1 + h3 + h3 {
+  position: absolute !important;
+  bottom: 0 !important;
+}
+.reveal .present h1 {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  text-align: center;
+}
+
+#print-tag, #print-tag > a {
+  color: #CCCCCC;
+  font-size: smaller;
+}
+
+/*********************************************
+ * Normal slide elements
+ *********************************************/
+
+.reveal h1,
+.reveal h2,
+.reveal h3,
+.reveal h4,
+.reveal h5,
+.reveal h6 {
+  text-transform: none;
+  width: 100%;
+}
+
+.reveal h2,
+.reveal h3,
+.reveal h4,
+.reveal h5,
+.reveal h6 {
+  text-align: left;
+}
+
+.reveal h2,
+.reveal .slide-title {
+  border-bottom: solid thick #003366;
+}
+
+.reveal {
+  color: #0000CC;
+}
+.reveal li li {
+  color: #003366;
+  margin-top: 0px;
+}
+.reveal li li,
+.reveal td li {
+  line-height: 1.2em;
+  font-size: 0.9em;
+}
+.reveal ul ul {
+  list-style-type: "- ";
+}
+
+// Condense line breaks inside of other elements.
+.reveal ul br {
+  content: "";
+  margin-top: -10px;
+  display: block;
+  font-size: 24%;
+}
+
+.reveal strong {
+  font-style: italic;
+  font-weight: normal;
+}
+.reveal .current-fragment strong {
+  color: darkred;
+  font-weight: bold;
+}
+
+
+/*********************************************
+ * Inactive element fading
+ *********************************************/
+
+.reveal section pre {
+  display: flex;
+  justify-content: center;
+  box-shadow: none;
+}
+.reveal section pre > code {
+  font-size: 20pt !important;
+  font-family: "Fira Code", "Hack", monospace;
+  padding-right: 1em;
+  border: solid 3px black;
+  background: antiquewhite;
+}
+
+// Code emphasizing quality can be placed in an environment that
+// styles the code block based on quality.
+.reveal section .good pre > code {
+  border: solid 3px #0033CC;
+  background: lightskyblue;
+}
+.reveal section .meh pre > code {
+  border: solid 3px orange;
+  background: sandybrown;
+}
+.reveal section .bad pre > code {
+  border: solid 3px #CC3300;
+  background: mistyrose;
+}
+
+
+/*********************************************
+ * Inactive element fading
+ *********************************************/
+
+// Baseline visibility for different fading styles
+.reveal .slides section .fragment.semi-fade-out {
+  opacity: 1;
+  visibility: inherit;
+}
+
+.reveal .slides section .fragment.fade-in-then-semi-out {
+  opacity: 0;
+  visibility: hidden;
+}
+
+// Inactive elements should partly fade out
+.reveal .slides section .fragment:is(.semi-fade-out, .fade-in-then-semi-out).visible {
+  opacity: 0.5;
+  visibility: inherit;
+}
+
+// Active elements should remain fully visible.
+.reveal .slides section .fragment:is(.semi-fade-out, .fade-in-then-semi-out).visible.current-fragment,
+.reveal .slides section .fragment:is(.semi-fade-out, .fade-in-then-semi-out).visible:has(.current-fragment) {
+  opacity: 1;
+  visibility: inherit;
+}
+
+
+/*********************************************
+ * Helper classes for custom formatting
+ *********************************************/
+
+// Lists or elements tagged with invislist will hide bullets
+
+.reveal .invislist li,
+.reveal li.invislist {
+  list-style-type: none;
+}
+
+
+// Transient elements disappear after containing fragments fade out.
+// This allows for appearing and then disappearing, which reveal.js
+// otherwise does not support by default.
+
+.reveal .transient {
+  color: #999999;
+}
+.fade-in-then-semi-out .transient {
+  opacity: 0;
+  visibility: hidden;
+}
+.fade-in-then-semi-out.current-fragment .transient {
+  opacity: 1;
+  visibility: inherit;
+}
+
+
+// Overnotes are "popover" boxes with extra notes and information.
+// By default, an .overnote appears centered over the body of a slide.
+// An .overnote-bottom is anchored to the bottom of a slide.
+// An .overnote-inline flows vertically with surrounding content.
+// An .overnote-display controls the basic styling of all overnotes
+
+// **Positioning** of different overnote types.
+.reveal .overnote-holder,
+.reveal .overnote {
+  width: fit-content;
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.reveal .overnote-bottom {
+  width: fit-content;
+  position: absolute;
+  bottom: 0.05em;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.reveal .overnote-inline {
+  width: fit-content;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+// **Styling** of all overnote types.
+.reveal .overnote-display,
+.reveal .overnote-bottom,
+.reveal .overnote-inline,
+.reveal .overnote {
+  background: #FFFBCC;
+  color: black;
+  border: 0.1em black solid;
+  padding: 0em;
+  width: fit-content;
+  white-space: nowrap;
+  font-size: 0.9em;
+}
+
+.overnote-display,
+.overnote-bottom,
+.overnote-inline,
+.overnote{
+  opacity: 0;
+  visibility: hidden;
+  display: none;
+}
+
+//.reveal .current-fragment :is(.overnote-display, .overnote-bottom, .overnote-inline, .overnote),
+.reveal :is(.overnote-display, .overnote-bottom, .overnote-inline, .overnote).current-fragment,
+.reveal :is(.overnote-display, .overnote-bottom, .overnote-inline, .overnote):has(.current-fragment) {
+  opacity: 1;
+  visibility: inherit;
+  display: block;
+}
+
+/*********************************************
+ * Citations and references
+ *********************************************/
+
+.reveal .reference-list {
+  display: inline-flex;
+  list-style: none;
+  padding: 0px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  margin-left: 0.5em;
+  font-size: 0.8em;
+  color: grey;
+}
+.reveal .reference-list::after {
+  content: "]";
+}
+.reveal .reference-list::before {
+  content: "[";
+}
+
+.reveal .reference-list .reference,
+.reveal .reference-list li
+{
+  display: flex;
+}
+.reveal .reference-list a {
+  color: grey;
+}
+.reveal .reference-list .reference::after,
+.reveal .reference-list li::after
+{
+  content: ",\00a0";
+}
+.reveal .reference-list .reference:last-child::after,
+.reveal .reference-list li:last-child::after,
+{
+  content: "";
+}
+
+
+/*********************************************
+ * Three column layout
+ *********************************************/
+
+// TODO: Redo with simpler and more useful styling.
+
+.thirdcolumn {
+  display: inline-block;
+  vertical-align: bottom;
+  width: 30%;
+  margin:0;
+  border:0;
+  padding:5px;
+  text-align: center;
+}
+
+.row {
+  width: 100%;
+}
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.reveal .thirdcolumn h4 {
+  text-align: center;
+  margin-bottom: 5px;
+}
+
+.reveal .thirdcolumn pre {
+  margin: 0px;
+  width: 100%;
+}
+.reveal .thirdcolumn code {
+  text-align: left;
+  padding: 2px;
+}
+
+
+/*********************************************
+ * Slide Numbers
+ *********************************************/
+
+.reveal .slide-number {
+  font-family: Carlito, sans-serif;
+  font-size: 18px;
+  line-height: 1;
+  color: #000;
+  background-color: rgba( 255.0, 255.0, 255.0, 0.4 );
+  padding: 5px;
+}
+
+.reveal .slide-number a {
+  color: currentColor;
+}
+
+.reveal .slide-number-delimiter {
+  margin: 0 3px;
+}
+
+
+/*********************************************
+ * PRINTING
+ *********************************************/
+
+.reveal .pdf-page .overnote-holder,
+.reveal .pdf-page .overnote {
+  width: fit-content;
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+html.print-pdf .reveal .slides section {
+  height: 100%;
+}
+
+// Inactive elements should not fade during printing
+html.print-pdf .reveal .slides section .fragment:is(.semi-fade-out, .fade-in-then-semi-out).visible {
+  opacity: 1;
+  visibility: inherit;
+}
+
+html.print-pdf #print-tag, html.print-pdf #print-tag > a {
+  display: none;
+}

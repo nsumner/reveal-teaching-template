@@ -1,0 +1,715 @@
+@charset "UTF-8";
+/**
+ * White theme for reveal.js. This is the opposite of the 'black' theme.
+ *
+ * By Hakim El Hattab, http://hakim.se
+ */
+section.has-dark-background, section.has-dark-background h1, section.has-dark-background h2, section.has-dark-background h3, section.has-dark-background h4, section.has-dark-background h5, section.has-dark-background h6 {
+  color: #fff;
+}
+
+/*********************************************
+ * GLOBAL STYLES
+ *********************************************/
+:root {
+  --r-background-color: #fff;
+  --r-main-font: Carlito, Helvetica, sans-serif;
+  --r-main-font-size: 42px;
+  --r-main-color: #222;
+  --r-block-margin: 20px;
+  --r-heading-margin: 0 0 20px 0;
+  --r-heading-font: Carlito, Helvetica, sans-serif;
+  --r-heading-color: #000080;
+  --r-heading-line-height: 1.2;
+  --r-heading-letter-spacing: normal;
+  --r-heading-text-transform: normal;
+  --r-heading-text-shadow: none;
+  --r-heading-font-weight: 400;
+  --r-heading1-text-shadow: none;
+  --r-heading1-size: 2.5em;
+  --r-heading2-size: 1.6em;
+  --r-heading3-size: 1.3em;
+  --r-heading4-size: 1em;
+  --r-code-font: monospace;
+  --r-link-color: #2a76dd;
+  --r-link-color-dark: #1a53a1;
+  --r-link-color-hover: #6ca0e8;
+  --r-selection-background-color: #98bdef;
+  --r-selection-color: #fff;
+  --r-overlay-element-bg-color: 240, 240, 240;
+  --r-overlay-element-fg-color: 0, 0, 0;
+}
+
+.reveal-viewport {
+  background: #fff;
+  background-color: var(--r-background-color);
+}
+
+.reveal {
+  font-family: var(--r-main-font);
+  font-size: var(--r-main-font-size);
+  font-weight: normal;
+  color: var(--r-main-color);
+}
+
+.reveal ::selection {
+  color: var(--r-selection-color);
+  background: var(--r-selection-background-color);
+  text-shadow: none;
+}
+
+.reveal ::-moz-selection {
+  color: var(--r-selection-color);
+  background: var(--r-selection-background-color);
+  text-shadow: none;
+}
+
+.reveal .slides section,
+.reveal .slides section > section {
+  line-height: 1.3;
+  font-weight: inherit;
+}
+
+/*********************************************
+ * HEADERS
+ *********************************************/
+.reveal h1,
+.reveal h2,
+.reveal h3,
+.reveal h4,
+.reveal h5,
+.reveal h6 {
+  margin: var(--r-heading-margin);
+  color: var(--r-heading-color);
+  font-family: var(--r-heading-font);
+  font-weight: var(--r-heading-font-weight);
+  line-height: var(--r-heading-line-height);
+  letter-spacing: var(--r-heading-letter-spacing);
+  text-transform: var(--r-heading-text-transform);
+  text-shadow: var(--r-heading-text-shadow);
+  word-wrap: break-word;
+}
+
+.reveal h1 {
+  font-size: var(--r-heading1-size);
+}
+
+.reveal h2 {
+  font-size: var(--r-heading2-size);
+}
+
+.reveal h3 {
+  font-size: var(--r-heading3-size);
+}
+
+.reveal h4 {
+  font-size: var(--r-heading4-size);
+}
+
+.reveal h1 {
+  text-shadow: var(--r-heading1-text-shadow);
+}
+
+/*********************************************
+ * OTHER
+ *********************************************/
+.reveal p {
+  margin: var(--r-block-margin) 0;
+  line-height: 1.3;
+}
+
+/* Remove trailing margins after titles */
+.reveal h1:last-child,
+.reveal h2:last-child,
+.reveal h3:last-child,
+.reveal h4:last-child,
+.reveal h5:last-child,
+.reveal h6:last-child {
+  margin-bottom: 0;
+}
+
+/* Ensure certain elements are never larger than the slide itself */
+.reveal img,
+.reveal video,
+.reveal iframe {
+  max-width: 95%;
+  max-height: 95%;
+}
+
+.reveal strong,
+.reveal b {
+  font-weight: bold;
+}
+
+.reveal em {
+  font-style: italic;
+}
+
+.reveal ol,
+.reveal dl,
+.reveal ul {
+  display: inline-block;
+  text-align: left;
+  margin: 0 0 0 1em;
+}
+
+.reveal ol {
+  list-style-type: decimal;
+}
+
+.reveal ul {
+  list-style-type: disc;
+}
+
+.reveal ul ul {
+  list-style-type: square;
+}
+
+.reveal ul ul ul {
+  list-style-type: circle;
+}
+
+.reveal ul ul,
+.reveal ul ol,
+.reveal ol ol,
+.reveal ol ul {
+  display: block;
+  margin-left: 40px;
+}
+
+.reveal dt {
+  font-weight: bold;
+}
+
+.reveal dd {
+  margin-left: 40px;
+}
+
+.reveal blockquote {
+  display: block;
+  position: relative;
+  width: 70%;
+  margin: var(--r-block-margin) auto;
+  padding: 5px;
+  font-style: italic;
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.2);
+}
+
+.reveal blockquote p:first-child,
+.reveal blockquote p:last-child {
+  display: inline-block;
+}
+
+.reveal q {
+  font-style: italic;
+}
+
+.reveal pre {
+  display: block;
+  position: relative;
+  width: 90%;
+  margin: var(--r-block-margin) auto;
+  text-align: left;
+  font-size: 0.55em;
+  font-family: var(--r-code-font);
+  line-height: 1.2em;
+  word-wrap: break-word;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+.reveal code {
+  font-family: var(--r-code-font);
+  text-transform: none;
+  tab-size: 2;
+}
+
+.reveal pre code {
+  display: block;
+  padding: 5px;
+  overflow: auto;
+  max-height: 400px;
+  word-wrap: normal;
+}
+
+.reveal .code-wrapper {
+  white-space: normal;
+}
+
+.reveal .code-wrapper code {
+  white-space: pre;
+}
+
+.reveal table {
+  margin: auto;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.reveal table th {
+  font-weight: bold;
+}
+
+.reveal table th,
+.reveal table td {
+  text-align: left;
+  padding: 0.2em 0.5em 0.2em 0.5em;
+  border-bottom: 1px solid;
+}
+
+.reveal table th[align=center],
+.reveal table td[align=center] {
+  text-align: center;
+}
+
+.reveal table th[align=right],
+.reveal table td[align=right] {
+  text-align: right;
+}
+
+.reveal table tbody tr:last-child th,
+.reveal table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.reveal sup {
+  vertical-align: super;
+  font-size: smaller;
+}
+
+.reveal sub {
+  vertical-align: sub;
+  font-size: smaller;
+}
+
+.reveal small {
+  display: inline-block;
+  font-size: 0.6em;
+  line-height: 1.2em;
+  vertical-align: top;
+}
+
+.reveal small * {
+  vertical-align: top;
+}
+
+.reveal img {
+  margin: var(--r-block-margin) 0;
+}
+
+/*********************************************
+ * LINKS
+ *********************************************/
+.reveal a {
+  color: var(--r-link-color);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.reveal a:hover {
+  color: var(--r-link-color-hover);
+  text-shadow: none;
+  border: none;
+}
+
+.reveal .roll span:after {
+  color: #fff;
+  background: var(--r-link-color-dark);
+}
+
+/*********************************************
+ * Frame helper
+ *********************************************/
+.reveal .r-frame {
+  border: 4px solid var(--r-main-color);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+}
+
+.reveal a .r-frame {
+  transition: all 0.15s linear;
+}
+
+.reveal a:hover .r-frame {
+  border-color: var(--r-link-color);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.55);
+}
+
+/*********************************************
+ * NAVIGATION CONTROLS
+ *********************************************/
+.reveal .controls {
+  color: var(--r-link-color);
+}
+
+/*********************************************
+ * PROGRESS BAR
+ *********************************************/
+.reveal .progress {
+  background: rgba(0, 0, 0, 0.2);
+  color: var(--r-link-color);
+}
+
+/*********************************************
+ * PRINT BACKGROUND
+ *********************************************/
+@media print {
+  .backgrounds {
+    background-color: var(--r-background-color);
+  }
+}
+.reveal .slides {
+  width: 100%;
+  text-align: left;
+}
+
+.reveal .slides > section.present,
+.reveal .slides > section > section.present {
+  min-height: 100% !important;
+  width: 100%;
+  position: absolute !important;
+  top: 0 !important;
+}
+
+/*********************************************
+ * Title slide formatting
+ *********************************************/
+.reveal .present:has(h1) h3 {
+  color: #000000;
+  width: 100%;
+  text-align: center;
+}
+
+.reveal .present h1 + h3 + h3 {
+  position: absolute !important;
+  bottom: 0 !important;
+}
+
+.reveal .present h1 {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  text-align: center;
+}
+
+#print-tag, #print-tag > a {
+  color: #CCCCCC;
+  font-size: smaller;
+}
+
+/*********************************************
+ * Normal slide elements
+ *********************************************/
+.reveal h1,
+.reveal h2,
+.reveal h3,
+.reveal h4,
+.reveal h5,
+.reveal h6 {
+  text-transform: none;
+  width: 100%;
+}
+
+.reveal h2,
+.reveal h3,
+.reveal h4,
+.reveal h5,
+.reveal h6 {
+  text-align: left;
+}
+
+.reveal h2,
+.reveal .slide-title {
+  border-bottom: solid thick #003366;
+}
+
+.reveal {
+  color: #0000CC;
+}
+
+.reveal li li {
+  color: #003366;
+  margin-top: 0px;
+}
+
+.reveal li li,
+.reveal td li {
+  line-height: 1.2em;
+  font-size: 0.9em;
+}
+
+.reveal ul ul {
+  list-style-type: "- ";
+}
+
+.reveal ul br {
+  content: "";
+  margin-top: -10px;
+  display: block;
+  font-size: 24%;
+}
+
+.reveal strong {
+  font-style: italic;
+  font-weight: normal;
+}
+
+.reveal .current-fragment strong {
+  color: darkred;
+  font-weight: bold;
+}
+
+/*********************************************
+ * Inactive element fading
+ *********************************************/
+.reveal section pre {
+  display: flex;
+  justify-content: center;
+  box-shadow: none;
+}
+
+.reveal section pre > code {
+  font-size: 20pt !important;
+  font-family: "Fira Code", "Hack", monospace;
+  padding-right: 1em;
+  border: solid 3px black;
+  background: antiquewhite;
+}
+
+.reveal section .good pre > code {
+  border: solid 3px #0033CC;
+  background: lightskyblue;
+}
+
+.reveal section .meh pre > code {
+  border: solid 3px orange;
+  background: sandybrown;
+}
+
+.reveal section .bad pre > code {
+  border: solid 3px #CC3300;
+  background: mistyrose;
+}
+
+/*********************************************
+ * Inactive element fading
+ *********************************************/
+.reveal .slides section .fragment.semi-fade-out {
+  opacity: 1;
+  visibility: inherit;
+}
+
+.reveal .slides section .fragment.fade-in-then-semi-out {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.reveal .slides section .fragment:is(.semi-fade-out, .fade-in-then-semi-out).visible {
+  opacity: 0.5;
+  visibility: inherit;
+}
+
+.reveal .slides section .fragment:is(.semi-fade-out, .fade-in-then-semi-out).visible.current-fragment,
+.reveal .slides section .fragment:is(.semi-fade-out, .fade-in-then-semi-out).visible:has(.current-fragment) {
+  opacity: 1;
+  visibility: inherit;
+}
+
+/*********************************************
+ * Helper classes for custom formatting
+ *********************************************/
+.reveal .invislist li,
+.reveal li.invislist {
+  list-style-type: none;
+}
+
+.reveal .transient {
+  color: #999999;
+}
+
+.fade-in-then-semi-out .transient {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.fade-in-then-semi-out.current-fragment .transient {
+  opacity: 1;
+  visibility: inherit;
+}
+
+.reveal .overnote-holder,
+.reveal .overnote {
+  width: fit-content;
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.reveal .overnote-bottom {
+  width: fit-content;
+  position: absolute;
+  bottom: 0.05em;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.reveal .overnote-inline {
+  width: fit-content;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.reveal .overnote-display,
+.reveal .overnote-bottom,
+.reveal .overnote-inline,
+.reveal .overnote {
+  background: #FFFBCC;
+  color: black;
+  border: 0.1em black solid;
+  padding: 0em;
+  width: fit-content;
+  white-space: nowrap;
+  font-size: 0.9em;
+}
+
+.overnote-display,
+.overnote-bottom,
+.overnote-inline,
+.overnote {
+  opacity: 0;
+  visibility: hidden;
+  display: none;
+}
+
+.reveal :is(.overnote-display, .overnote-bottom, .overnote-inline, .overnote).current-fragment,
+.reveal :is(.overnote-display, .overnote-bottom, .overnote-inline, .overnote):has(.current-fragment) {
+  opacity: 1;
+  visibility: inherit;
+  display: block;
+}
+
+/*********************************************
+ * Citations and references
+ *********************************************/
+.reveal .reference-list {
+  display: inline-flex;
+  list-style: none;
+  padding: 0px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  margin-left: 0.5em;
+  font-size: 0.8em;
+  color: grey;
+}
+
+.reveal .reference-list::after {
+  content: "]";
+}
+
+.reveal .reference-list::before {
+  content: "[";
+}
+
+.reveal .reference-list .reference,
+.reveal .reference-list li {
+  display: flex;
+}
+
+.reveal .reference-list a {
+  color: grey;
+}
+
+.reveal .reference-list .reference::after,
+.reveal .reference-list li::after {
+  content: ", ";
+}
+
+.reveal .reference-list .reference:last-child::after,
+.reveal .reference-list li:last-child::after {
+  content: "";
+}
+
+/*********************************************
+ * Three column layout
+ *********************************************/
+.thirdcolumn {
+  display: inline-block;
+  vertical-align: bottom;
+  width: 30%;
+  margin: 0;
+  border: 0;
+  padding: 5px;
+  text-align: center;
+}
+
+.row {
+  width: 100%;
+}
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.reveal .thirdcolumn h4 {
+  text-align: center;
+  margin-bottom: 5px;
+}
+
+.reveal .thirdcolumn pre {
+  margin: 0px;
+  width: 100%;
+}
+
+.reveal .thirdcolumn code {
+  text-align: left;
+  padding: 2px;
+}
+
+/*********************************************
+ * Slide Numbers
+ *********************************************/
+.reveal .slide-number {
+  font-family: Carlito, sans-serif;
+  font-size: 18px;
+  line-height: 1;
+  color: #000;
+  background-color: rgba(255, 255, 255, 0.4);
+  padding: 5px;
+}
+
+.reveal .slide-number a {
+  color: currentColor;
+}
+
+.reveal .slide-number-delimiter {
+  margin: 0 3px;
+}
+
+/*********************************************
+ * PRINTING
+ *********************************************/
+.reveal .pdf-page .overnote-holder,
+.reveal .pdf-page .overnote {
+  width: fit-content;
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+html.print-pdf .reveal .slides section {
+  height: 100%;
+}
+
+html.print-pdf .reveal .slides section .fragment:is(.semi-fade-out, .fade-in-then-semi-out).visible {
+  opacity: 1;
+  visibility: inherit;
+}
+
+html.print-pdf #print-tag, html.print-pdf #print-tag > a {
+  display: none;
+}
