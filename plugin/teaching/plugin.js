@@ -28,6 +28,7 @@ const addPrintTag = function(slide) {
   printTag.style.left = 0;
   printTag.style.bottom = "1em";
   printTag.id = "print-tag";
+  printTag.classList.add("no-print");
   slide.appendChild(printTag);
 }
 

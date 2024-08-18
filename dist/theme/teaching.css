@@ -710,6 +710,7 @@ html.print-pdf .reveal .slides section .fragment:is(.semi-fade-out, .fade-in-the
   visibility: inherit;
 }
 
-html.print-pdf #print-tag, html.print-pdf #print-tag > a {
+html.print-pdf .no-print {
   display: none;
+  visibility: hidden;
 }

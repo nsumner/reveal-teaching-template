@@ -51,6 +51,7 @@
 * Reference lists are just tagged lists of links:
   * [Ousterhout 2018](https://web.stanford.edu/~ouster/cgi-bin/aposd.php) <!-- .element: class="reference-list" -->
   * [Hickey 2011](https://www.infoq.com/presentations/Simple-Made-Easy/)
+* Elements tagged with no-print do not show up when printing to a PDF. <!-- .element: class="no-print" -->
 
 ---
 ## Overnotes in HTML
