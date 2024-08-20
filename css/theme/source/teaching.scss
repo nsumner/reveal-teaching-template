@@ -173,6 +173,9 @@ $heading4Size: 1.0em;
 .reveal section .hljs:not(:first-child).fragment {
   width: auto;
 }
+.reveal section pre > code .highlight-line {
+  background: yellow;
+}
 
 // Code emphasizing quality can be placed in an environment that
 // styles the code block based on quality.
