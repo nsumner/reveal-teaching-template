@@ -173,9 +173,14 @@ $heading4Size: 1.0em;
 .reveal section .hljs:not(:first-child).fragment {
   width: auto;
 }
+// Providing a high contrast background and outline for the code *should*
+// providing stronger emphasis and clarity when walking through code examples
+// with highlights. This defines a yellow background with a thin red outline
+// around text.
+// text-shadow entries are (x offset, y offset, blur radius, color)
 .reveal section pre > code .highlight-line {
   background: yellow;
-  text-shadow: -0.5px -0.5px 0 #F00, 0.5px -0.5px 0 #F00, -0.5px 0.5px 0 #F00, 0.5px 0.5px 0 #F00;
+  text-shadow: -0.5px -0.5px 0.5px #F00, 0.5px -0.5px 0.5px #F00, -0.5px 0.5px 0.5px #F00, 0.5px 0.5px 0.5px #F00;
 }
 
 // Code emphasizing quality can be placed in an environment that
