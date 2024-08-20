@@ -9,13 +9,13 @@
 * Some code examples
   * If you have [Fira Code](https://github.com/tonsky/FiraCode) installed, code examples will have readability ligatures enabled.
   * Some neutral code
-      ```C
+      ```C []
       if (a != b) {
         foo(c);
       }
       ```
-  * Some bad code <!-- .element: class="bad" -->
-      ```C
+  * Some bad code with highlighted lines <!-- .element: class="bad" -->
+      ```C [1|2|1-2]
       if (a != b) {
         foo(c);
       }
@@ -26,13 +26,13 @@
 ## Annotations can fine-tune behavior
 
 * Good code <!-- .element: class="good" -->
-    ```C
+    ```C []
     if (a != b) {
       foo(c);
     }
     ```
-* Bad code with highlighted lines <!-- .element: class="bad" -->
-    ```C [1|2|1-2]
+* Bad code  <!-- .element: class="bad" -->
+    ```C []
     if (a != b) {
       foo(c);
     }
