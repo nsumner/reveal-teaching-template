@@ -175,6 +175,7 @@ $heading4Size: 1.0em;
 }
 .reveal section pre > code .highlight-line {
   background: yellow;
+  text-shadow: -0.5px -0.5px 0 #F00, 0.5px -0.5px 0 #F00, -0.5px 0.5px 0 #F00, 0.5px 0.5px 0 #F00;
 }
 
 // Code emphasizing quality can be placed in an environment that
