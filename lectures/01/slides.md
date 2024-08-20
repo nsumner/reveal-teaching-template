@@ -31,8 +31,8 @@
       foo(c);
     }
     ```
-* Bad code <!-- .element: class="bad" -->
-    ```C
+* Bad code with highlighted lines <!-- .element: class="bad" -->
+    ```C [1|2|1-2]
     if (a != b) {
       foo(c);
     }

@@ -460,20 +460,23 @@ section.has-dark-background, section.has-dark-background h1, section.has-dark-ba
 }
 
 /*********************************************
- * Inactive element fading
+ * Code
  *********************************************/
 .reveal section pre {
   display: flex;
-  justify-content: center;
+  justify-content: left;
   box-shadow: none;
 }
 
 .reveal section pre > code {
   font-size: 20pt !important;
   font-family: "Fira Code", "Hack", monospace;
-  padding-right: 1em;
   border: solid 3px black;
   background: antiquewhite;
+}
+
+.reveal section .hljs:not(:first-child).fragment {
+  width: auto;
 }
 
 .reveal section .good pre > code {

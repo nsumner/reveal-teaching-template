@@ -150,20 +150,28 @@ $heading4Size: 1.0em;
 
 
 /*********************************************
- * Inactive element fading
+ * Code
  *********************************************/
 
 .reveal section pre {
   display: flex;
-  justify-content: center;
+  justify-content: left;
   box-shadow: none;
 }
 .reveal section pre > code {
   font-size: 20pt !important;
   font-family: "Fira Code", "Hack", monospace;
-  padding-right: 1em;
+  // padding-right: 1em;
   border: solid 3px black;
   background: antiquewhite;
+}
+// By default, reveal.js changes the size of all non-first elements of
+// highlighted code sections to be 100%, but this means that we cannot have
+// more compact code boxes. Auto width lets us make that a little more
+// consistent and tighter. But this does mean that code snippets must be left
+// aligned in their `pre` wrappers unless we tweak more aggressively.
+.reveal section .hljs:not(:first-child).fragment {
+  width: auto;
 }
 
 // Code emphasizing quality can be placed in an environment that
