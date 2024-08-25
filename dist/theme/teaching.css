@@ -598,6 +598,42 @@ section.has-dark-background, section.has-dark-background h1, section.has-dark-ba
   display: block;
 }
 
+.reveal .website {
+  border: 2px solid #000080;
+  box-shadow: 10px 10px 10px dimgray;
+  position: absolute;
+  width: 75%;
+  height: 75%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.mermaid foreignObject {
+  overflow: visible;
+  line-height: 90%;
+}
+
+/*********************************************
+ * Figures and animation
+ *********************************************/
+.animate-svg {
+  display: none;
+}
+
+.animate-svg-hidden {
+  visibility: hidden;
+}
+
+.animate-svg-shown {
+  visibility: inherit;
+}
+
+.animate-svg-faded {
+  visibility: inherit;
+  opacity: 50%;
+}
+
 /*********************************************
  * Citations and references
  *********************************************/

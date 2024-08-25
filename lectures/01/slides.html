@@ -25,13 +25,13 @@
     <script src="../../plugin/markdown/markdown.js"></script>
     <script src="../../plugin/highlight/highlight.js"></script>
     <script src="../../plugin/tracing/plugin.js"></script>
-    <script src="../../plugin/teaching/plugin.js"></script>
-    <script>
+    <script src="../../plugin/teaching/plugin.js" type="module"></script>
+    <script type="module">
       Reveal.initialize({
         hash: true,
 
         // Learn about plugins: https://revealjs.com/plugins/
-        plugins: [ RevealMarkdown, RevealHighlight, RevealTeaching ],
+        plugins: [ RevealMarkdown, RevealTeaching, RevealHighlight ],
 
         // always show flattened slide numbers
         slideNumber: "c/t",

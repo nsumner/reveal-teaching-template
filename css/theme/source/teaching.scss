@@ -323,7 +323,7 @@ $heading4Size: 1.0em;
 // External websites should behave similar to overnotes, but they should
 // visually convey independence from the slides and note carry the
 // "additional information" connotation of overnotes.
-.website {
+.reveal .website {
   border: 2px solid #000080;
   box-shadow: 10px 10px 10px dimgray;
   position: absolute;

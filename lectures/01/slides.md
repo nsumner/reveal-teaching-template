@@ -82,6 +82,33 @@ They can also be anchored to the bottom.
 </div>
 
 ---
+## Scriptable Animations
+
+SVG figures can be animated with inline commands in markdown.<br>
+This includes generated SVG figures from, e.g., Mermaid.
+
+<svg width=500 height=300 style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -40%);">
+  <style>
+    ellipse{ opacity: 50% }
+    #first { fill: red;   }
+    #second{ fill: green; }
+    #third { fill: blue;  }
+    .surround { stroke-width: 10px; stroke: darkred;  fill: none; opacity: 100%; }
+  </style>
+  <ellipse class="surround" cx="250" cy="150" rx="245" ry="245" />
+  <ellipse id="first"  ry="150" rx="150" cy="150" cx="150" />
+  <ellipse id="second" ry="150" rx="150" cy="150" cx="250" />
+  <ellipse id="third"  ry="150" rx="150" cy="150" cx="350" />
+</svg>
+
+```animate-svg
+1. show(first)
+2. show(second)
+3. show(third)
+4. hide(second)
+```
+
+---
 ## Other Reveal.js features still work
 
 * Including embedded SVG and animations. <!-- .element: data-fragment-index="1" -->
@@ -100,5 +127,4 @@ They can also be anchored to the bottom.
 * And controlling <!-- .element: data-fragment-index="4" -->
 * Showing web pages <!-- .element: data-fragment-index="6" -->
     <iframe data-src="https://revealjs.com/" data-preload
-        style="position: absolute; width: 75%; height: 75%; top: 50%; left: 50%; transform: translate(-50%, -40%);"
-        class="fragment fade-in-then-out" data-fragment-index="7"/>
+        class="fragment fade-in-then-out website" data-fragment-index="7"/>
