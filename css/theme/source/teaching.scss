@@ -180,7 +180,10 @@ $heading4Size: 1.0em;
 // text-shadow entries are (x offset, y offset, blur radius, color)
 .reveal section pre > code .highlight-line {
   background: yellow;
-  text-shadow: -0.5px -0.5px 0.5px #F00, 0.5px -0.5px 0.5px #F00, -0.5px 0.5px 0.5px #F00, 0.5px 0.5px 0.5px #F00;
+  text-shadow: -0.5px -0.5px 0.5px #F00,
+                0.5px -0.5px 0.5px #F00,
+               -0.5px  0.5px 0.5px #F00,
+                0.5px  0.5px 0.5px #F00;
 }
 
 // Code emphasizing quality can be placed in an environment that
@@ -315,6 +318,46 @@ $heading4Size: 1.0em;
   opacity: 1;
   visibility: inherit;
   display: block;
+}
+
+// External websites should behave similar to overnotes, but they should
+// visually convey independence from the slides and note carry the
+// "additional information" connotation of overnotes.
+.website {
+  border: 2px solid #000080;
+  box-shadow: 10px 10px 10px dimgray;
+  position: absolute;
+  width: 75%;
+  height: 75%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+// SVG Generating libraries like Mermaid, PlantUML, etc. can generate
+// foreignObject elements with contents that overflow specific pixel
+// based heights. We can make that more robust in general.
+.mermaid foreignObject {
+  overflow: visible;
+  line-height: 90%;
+}
+
+/*********************************************
+ * Figures and animation
+ *********************************************/
+
+.animate-svg {
+  display: none;
+}
+.animate-svg-hidden {
+  visibility: hidden;
+}
+.animate-svg-shown {
+  visibility: inherit;
+}
+.animate-svg-faded {
+  visibility: inherit;
+  opacity: 50%;
 }
 
 /*********************************************
