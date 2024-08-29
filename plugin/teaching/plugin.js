@@ -6,7 +6,7 @@ window.RevealTeaching = window.RevealTeaching || (() => {
     id: 'teaching',
     init: function(reveal) {
       deck = reveal;
-      initTeaching(deck);
+      return initTeaching(deck);
     }
   };
 });
@@ -67,7 +67,27 @@ const convertListsItemsToFragments = function() {
 };
 
 
-const initTeaching = function(deck) {
+const inlineSVGs = async function() {
+  const svgImages = document.querySelectorAll('img[src]:not([src=""])');
+  for (const svgImage of svgImages) {
+    try {
+      const response = await fetch(svgImage.src);
+      // Require a clear "OK" status to complete inlining.
+      if (response.status != 200) {
+        throw new Error(`Bad status code in response: {response.status}`);
+      }
+      const svgText = await response.text();
+      const container = document.createElement('div');
+      container.innerHTML = svgText;
+      svgImage.replaceWith(container.querySelector("svg"));
+    } catch (error) {
+      console.error('Could not inline svg:', svgImage.src, error);
+    }
+  }
+};
+
+
+const initTeaching = async function(deck) {
   Reveal.configure({
     // PDF printing can prioritize note taking when all fragments on
     // a slide are displayed in a single slide.
@@ -80,6 +100,8 @@ const initTeaching = function(deck) {
   inferTitleFromMarkdown();
   convertOvernotesToFragments();
   canonicalizeReferenceLists();
+
+  await inlineSVGs();
   animateSVGs(deck);
 
   // NOTE: Must run after other functions that may produce block lists
