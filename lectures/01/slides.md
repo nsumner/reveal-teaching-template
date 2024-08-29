@@ -87,19 +87,7 @@ They can also be anchored to the bottom.
 SVG figures can be animated with inline commands in markdown.<br>
 This includes generated SVG figures from, e.g., Mermaid.
 
-<svg width=500 height=300 style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -40%);">
-  <style>
-    ellipse{ opacity: 50% }
-    #first { fill: red;   }
-    #second{ fill: green; }
-    #third { fill: blue;  }
-    .surround { stroke-width: 10px; stroke: darkred;  fill: none; opacity: 100%; }
-  </style>
-  <ellipse class="surround" cx="250" cy="150" rx="245" ry="245" />
-  <ellipse id="first"  ry="150" rx="150" cy="150" cx="150" />
-  <ellipse id="second" ry="150" rx="150" cy="150" cx="250" />
-  <ellipse id="third"  ry="150" rx="150" cy="150" cx="350" />
-</svg>
+![External SVGs will be inlined](external.svg "External SVGs will be inlined.")
 
 ```animate-svg
 1. show(first)
