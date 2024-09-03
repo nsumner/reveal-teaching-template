@@ -115,4 +115,4 @@ This includes generated SVG figures from, e.g., Mermaid.
 * And controlling <!-- .element: data-fragment-index="4" -->
 * Showing web pages <!-- .element: data-fragment-index="6" -->
     <iframe data-src="https://revealjs.com/" data-preload
-        class="fragment fade-in-then-out website" data-fragment-index="7"/>
+        class="fragment fade-in-then-out website" data-fragment-index="7"></iframe>

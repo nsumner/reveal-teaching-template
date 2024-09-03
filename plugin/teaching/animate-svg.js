@@ -36,7 +36,7 @@ const hideIDsInSVG = function(animation) {
 
 const initializeSVG = function(animation) {
   const figure = animation.svgFigure;
-  animation.components = Array.from(figure.querySelectorAll("[id]"));
+  animation.components = Array.from(figure.querySelectorAll("[id]:not(marker)"));
   hideIDsInSVG(animation);
 }
 
@@ -155,7 +155,6 @@ const prepareSVGAnimation = function(animation, classes) {
 
     }
   }
-  console.log("Found animation", animation);
   initializeSVG(animation);
   return rawSVGHandlers;
 };

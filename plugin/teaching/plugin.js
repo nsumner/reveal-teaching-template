@@ -22,6 +22,18 @@ const inferTitleFromMarkdown = function() {
 };
 
 
+const addFontsTag = function(slide) {
+  const fontTag = document.createElement("span");
+  fontTag.innerHTML = "[<a href=\"https://github.com/tonsky/FiraCode\">fonts</a>]";
+  fontTag.style.position = "absolute";
+  fontTag.style.left = 0;
+  fontTag.style.bottom = "0em";
+  fontTag.id = "fonts-tag";
+  fontTag.classList.add("no-print");
+  slide.appendChild(fontTag);
+};
+
+
 const addPrintTag = function(slide) {
   const printTag = document.createElement("span");
   printTag.innerHTML = "[<a href=\"?print-pdf\">printable</a>]";
@@ -67,6 +79,100 @@ const convertListsItemsToFragments = function() {
 };
 
 
+const recursivelyChangeNames = function(idMap, node) {
+  const remapInString = function(original, remapped, str) {
+    return str.replace(new RegExp(`\\b${original}\\b`, 'g'), `${remapped}`);
+  };
+  const remapAllIDs = function(getter, setter, debug=false) {
+    for (const [key, value] of idMap.entries()) {
+      const haystack = getter();
+      if (haystack.includes(key)) {
+        const remapped = remapInString(key, value, haystack);
+        setter(remapped);
+      }
+    }
+  };
+
+  if (node.nodeType === Node.ELEMENT_NODE) {
+    for (const attr of node.attributes) {
+      if (idMap.has(attr.value)) {
+        node.setAttribute(attr.name, idMap.get(attr.value));
+      } else {
+        remapAllIDs(()=>attr.value, (newStr)=>node.setAttribute(attr.name, newStr));
+      }
+    }
+  }
+
+  if (['CODE', 'STYLE'].includes(node.nodeName.toUpperCase()) && node.textContent) {
+    remapAllIDs(()=>node.textContent, (newStr)=>{node.textContent = newStr;});
+  }
+
+  for (const child of node.children) {
+    recursivelyChangeNames(idMap, child);
+  }
+}
+
+
+const extractDuplicatedIDs = function(subtree) {
+  const localIDElements = Array.from(subtree.querySelectorAll("[id]"));
+  const otherIDElements = new Set(document.querySelectorAll("[id]"))
+                          .difference(new Set(localIDElements));
+
+  const otherIDs = new Set(Array.from(otherIDElements).map(element => element.id));
+  const localIDs = new Set(localIDElements.map(element => element.id));
+  return otherIDs.intersection(localIDs);
+};
+
+
+const extractDuplicatedClasses = function(subtree) {
+  const classPattern = /\.([a-zA-Z0-9_-]+)/g;
+  const extractDefinedClasses = function(style) {
+    const names = style.textContent
+                       .split('\n')
+                       .map(line => line.slice(0, line.indexOf('{')))
+                       .filter(line => line != '')
+                       .map(line => line.match(classPattern))
+                       .flatMap(match => match ? match[0].slice(1) : []);
+    return names;
+  };
+  const localStyleElements = Array.from(subtree.querySelectorAll("style"));
+  const otherStyleElements = new Set(document.querySelectorAll("style"))
+                             .difference(new Set(localStyleElements));
+
+  const otherClasses = new Set(Array.from(otherStyleElements)
+                                    .map(element => extractDefinedClasses(element))
+                                    .flat());
+  const localClasses = new Set(localStyleElements.map(element => extractDefinedClasses(element))
+                                                .flat());
+  return otherClasses.intersection(localClasses);
+}
+
+
+const rewriteDuplicateIDs = function(idContainer) {
+  const duplicateIDs = extractDuplicatedIDs(idContainer);
+  const duplicateClasses = extractDuplicatedClasses(idContainer);
+
+  if (duplicateIDs.length === 0 && dupliateClasses.length === 0) {
+    return;
+  }
+
+  // Sections identify the current slide. We use the slides to disambiguate as
+  // a matter of best effort disambiguation.
+  const slides = Array.from(document.querySelectorAll("section"));
+  const slide = idContainer.closest("section");
+  const index = slides.indexOf(slide) + 1;
+
+  const idMap = new Map();
+  for (const id of duplicateIDs) {
+    idMap.set(id, `${id}_slide${index}`);
+  }
+  for (const name of duplicateClasses) {
+    idMap.set(name, `${name}_slide${index}`);
+  }
+  recursivelyChangeNames(idMap, slide);
+};
+
+
 const inlineSVGs = async function() {
   const svgImages = document.querySelectorAll('img[src]:not([src=""])');
   for (const svgImage of svgImages) {
@@ -79,7 +185,9 @@ const inlineSVGs = async function() {
       const svgText = await response.text();
       const container = document.createElement('div');
       container.innerHTML = svgText;
-      svgImage.replaceWith(container.querySelector("svg"));
+      const newSVG = container.querySelector("svg");
+      svgImage.replaceWith(newSVG);
+      rewriteDuplicateIDs(newSVG);
     } catch (error) {
       console.error('Could not inline svg:', svgImage.src, error);
     }
@@ -117,4 +225,5 @@ const initTeaching = async function(deck) {
   // Add a printing link to the first page
   const firstPage = deck.getSlidesElement().querySelector("section:first-child");
   addPrintTag(firstPage);
+  addFontsTag(firstPage);
 };

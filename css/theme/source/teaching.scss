@@ -83,7 +83,8 @@ $heading4Size: 1.0em;
   text-align: center;
 }
 
-#print-tag, #print-tag > a {
+#print-tag, #print-tag > a,
+#fonts-tag, #fonts-tag > a {
   color: #CCCCCC;
   font-size: smaller;
 }
@@ -139,6 +140,12 @@ $heading4Size: 1.0em;
   font-size: 24%;
 }
 
+.reveal em {
+  font-style: italic;
+  font-weight: normal;
+  color: #0000CC;
+}
+
 .reveal strong {
   font-style: italic;
   font-weight: normal;
@@ -155,12 +162,19 @@ $heading4Size: 1.0em;
 
 .reveal section pre {
   display: flex;
+  width: auto;
   justify-content: left;
   box-shadow: none;
 }
+.reveal section pre:has(.centercode) {
+  justify-content: center;
+}
+.reveal code {
+  font-family: "Fira Code", "Hack", monospace;
+  font-size: smaller;
+}
 .reveal section pre > code {
   font-size: 20pt !important;
-  font-family: "Fira Code", "Hack", monospace;
   // padding-right: 1em;
   border: solid 3px black;
   background: antiquewhite;
@@ -194,7 +208,7 @@ $heading4Size: 1.0em;
 }
 .reveal section .meh pre > code {
   border: solid 3px orange;
-  background: sandybrown;
+  background: gold;
 }
 .reveal section .bad pre > code {
   border: solid 3px #CC3300;
@@ -219,7 +233,7 @@ $heading4Size: 1.0em;
 
 // Inactive elements should partly fade out
 .reveal .slides section .fragment:is(.semi-fade-out, .fade-in-then-semi-out).visible {
-  opacity: 0.5;
+  opacity: 0.4;
   visibility: inherit;
 }
 
@@ -234,6 +248,12 @@ $heading4Size: 1.0em;
 /*********************************************
  * Helper classes for custom formatting
  *********************************************/
+
+// Larger gaps can be added between two list elements
+
+.reveal li.smallgap {
+  margin-top: 0.5em;
+}
 
 // Lists or elements tagged with invislist will hide bullets
 
@@ -257,6 +277,10 @@ $heading4Size: 1.0em;
 .fade-in-then-semi-out.current-fragment .transient {
   opacity: 1;
   visibility: inherit;
+}
+
+.reveal .collapse:not(.current-fragment .collapse):not(.current-fragment.collapse) {
+  display: none;
 }
 
 
@@ -357,7 +381,7 @@ $heading4Size: 1.0em;
 }
 .animate-svg-faded {
   visibility: inherit;
-  opacity: 50%;
+  opacity: 40%;
 }
 
 /*********************************************
