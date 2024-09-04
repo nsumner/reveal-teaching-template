@@ -24,7 +24,8 @@ const inferTitleFromMarkdown = function() {
 
 const addFontsTag = function(slide) {
   const fontTag = document.createElement("span");
-  fontTag.innerHTML = "[<a href=\"https://github.com/tonsky/FiraCode\">fonts</a>]";
+  fontTag.innerHTML = "[<a href=\"https://github.com/tonsky/FiraCode\">Fira Code</a>, "
+                    + "<a href=\"https://fonts.google.com/specimen/Carlito\">Carlito</a>]";
   fontTag.style.position = "absolute";
   fontTag.style.left = 0;
   fontTag.style.bottom = "0em";
@@ -174,7 +175,8 @@ const rewriteDuplicateIDs = function(idContainer) {
 
 
 const inlineSVGs = async function() {
-  const svgImages = document.querySelectorAll('img[src]:not([src=""])');
+  const svgImages = Array.from(document.querySelectorAll('img[src]:not([src=""])'))
+                         .filter(image => image.src.endsWith(".svg"));
   for (const svgImage of svgImages) {
     try {
       const response = await fetch(svgImage.src);
