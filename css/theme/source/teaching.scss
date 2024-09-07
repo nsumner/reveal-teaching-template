@@ -194,10 +194,10 @@ $heading4Size: 1.0em;
 // text-shadow entries are (x offset, y offset, blur radius, color)
 .reveal section pre > code .highlight-line {
   background: yellow;
-  text-shadow: -0.5px -0.5px 0.5px #F00,
-                0.5px -0.5px 0.5px #F00,
-               -0.5px  0.5px 0.5px #F00,
-                0.5px  0.5px 0.5px #F00;
+  text-shadow: -0.2px -0.2px 0.5px #F00,
+                0.2px -0.2px 0.5px #F00,
+               -0.2px  0.2px 0.5px #F00,
+                0.2px  0.2px 0.5px #F00;
 }
 
 // Code emphasizing quality can be placed in an environment that
@@ -232,14 +232,18 @@ $heading4Size: 1.0em;
 }
 
 // Inactive elements should partly fade out
-.reveal .slides section .fragment:is(.semi-fade-out, .fade-in-then-semi-out).visible {
+.reveal .slides section .fragment:is(.semi-fade-out, .fade-in-then-semi-out).visible,
+.reveal .slides section:has(.current-fragment) :not(.fragment).fade-in-then-semi-out,
+.reveal .slides section .semi-fade-out {
   opacity: 0.4;
   visibility: inherit;
 }
 
 // Active elements should remain fully visible.
 .reveal .slides section .fragment:is(.semi-fade-out, .fade-in-then-semi-out).visible.current-fragment,
-.reveal .slides section .fragment:is(.semi-fade-out, .fade-in-then-semi-out).visible:has(.current-fragment) {
+.reveal .slides section .fragment:is(.semi-fade-out, .fade-in-then-semi-out).visible:has(.current-fragment),
+.reveal .slides section:has(.current-fragment) :not(.fragment).fade-in-then-semi-out:has(.current-fragment),
+.reveal .slides section .semi-fade-out:has(.current-fragment) {
   opacity: 1;
   visibility: inherit;
 }
