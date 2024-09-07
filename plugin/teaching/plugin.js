@@ -22,6 +22,22 @@ const inferTitleFromMarkdown = function() {
 };
 
 
+// This function allows classes for a parent element in the dom to be specified
+// via an attribute of a child. This is useful because Markdown only gives
+// access to children in some cases where applying a class to a parent is
+// desired. For instance, lists give access to elements but not the list.
+const pushParentClasses = function() {
+  const haveParentClasses = Array.from(document.querySelectorAll("[data-parent-classes]"))
+                                 .filter(element => element.parentElement);
+  for (const element of haveParentClasses) {
+    const parent = element.parentElement;
+    const classes = element.getAttribute('data-parent-classes').split(' ');
+    parent.classList.add(...classes);
+    element.removeAttribute('data-parent-classes');
+  }
+}
+
+
 const addFontsTag = function(slide) {
   const fontTag = document.createElement("span");
   fontTag.innerHTML = "[<a href=\"https://github.com/tonsky/FiraCode\">Fira Code</a>, "
@@ -217,6 +233,7 @@ const initTeaching = async function(deck) {
   });
 
   inferTitleFromMarkdown();
+  pushParentClasses();
   convertOvernotesToFragments();
   canonicalizeReferenceLists();
 
