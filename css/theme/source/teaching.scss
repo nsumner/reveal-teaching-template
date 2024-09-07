@@ -253,6 +253,22 @@ $heading4Size: 1.0em;
  * Helper classes for custom formatting
  *********************************************/
 
+// Horizontal lists enable horizontal layout even from just within markdown.
+
+.reveal .horizontal-list {
+  display: flex;
+  list-style: none;
+  width:100%;
+  margin:0;
+  padding:0;
+}
+.reveal .horizontal-list > li {
+  display: inline-block;
+  list-style-type: none;
+  margin-right: auto;
+  margin-left: auto;
+}
+
 // Larger gaps can be added between two list elements
 
 .reveal li.smallgap {
@@ -283,7 +299,7 @@ $heading4Size: 1.0em;
   visibility: inherit;
 }
 
-.reveal .collapse:not(.current-fragment .collapse):not(.current-fragment.collapse) {
+.reveal .collapse:not(.current-fragment .collapse):not(.current-fragment.collapse):not(.collapse:has(.current-fragment)) {
   display: none;
 }
 
@@ -331,7 +347,6 @@ $heading4Size: 1.0em;
   font-size: 0.9em;
 }
 
-.overnote-display,
 .overnote-bottom,
 .overnote-inline,
 .overnote{
@@ -340,9 +355,8 @@ $heading4Size: 1.0em;
   display: none;
 }
 
-//.reveal .current-fragment :is(.overnote-display, .overnote-bottom, .overnote-inline, .overnote),
-.reveal :is(.overnote-display, .overnote-bottom, .overnote-inline, .overnote).current-fragment,
-.reveal :is(.overnote-display, .overnote-bottom, .overnote-inline, .overnote):has(.current-fragment) {
+.reveal :is(.overnote-bottom, .overnote-inline, .overnote).current-fragment,
+.reveal :is(.overnote-bottom, .overnote-inline, .overnote):has(.current-fragment) {
   opacity: 1;
   visibility: inherit;
   display: block;

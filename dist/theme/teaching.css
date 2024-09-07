@@ -465,6 +465,7 @@ section.has-dark-background, section.has-dark-background h1, section.has-dark-ba
 .reveal section pre {
   display: flex;
   justify-content: left;
+  width: auto;
   box-shadow: none;
 }
 
