@@ -174,6 +174,14 @@ const rewriteDuplicateIDs = function(idContainer) {
 };
 
 
+const copyAttributes = function(source, target) {
+  for (const attr of source.attributes) {
+    const attrName = attr.name === "id" ? 'data-id' : attr.name;
+    target.setAttribute(attrName, attr.value);
+  }
+};
+
+
 const inlineSVGs = async function() {
   const svgImages = Array.from(document.querySelectorAll('img[src]:not([src=""])'))
                          .filter(image => image.src.endsWith(".svg"));
@@ -188,6 +196,7 @@ const inlineSVGs = async function() {
       const container = document.createElement('div');
       container.innerHTML = svgText;
       const newSVG = container.querySelector("svg");
+      copyAttributes(svgImage, newSVG);
       svgImage.replaceWith(newSVG);
       rewriteDuplicateIDs(newSVG);
     } catch (error) {
