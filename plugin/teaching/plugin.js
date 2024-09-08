@@ -38,6 +38,18 @@ const pushParentClasses = function() {
 }
 
 
+const pushParentStyles = function() {
+  const haveParentStyles = Array.from(document.querySelectorAll("[data-parent-styles]"))
+                                 .filter(element => element.parentElement);
+  for (const element of haveParentStyles) {
+    const parent = element.parentElement;
+    const style = element.getAttribute('data-parent-styles');
+    parent.style = style;
+    element.removeAttribute('data-parent-styles');
+  }
+}
+
+
 const addFontsTag = function(slide) {
   const fontTag = document.createElement("span");
   fontTag.innerHTML = "[<a href=\"https://github.com/tonsky/FiraCode\">Fira Code</a>, "
@@ -60,6 +72,18 @@ const addPrintTag = function(slide) {
   printTag.id = "print-tag";
   printTag.classList.add("no-print");
   slide.appendChild(printTag);
+};
+
+
+const extractMarkdownOvernotes = function() {
+  const overnotes = document.querySelectorAll("pre > code:is(.overnote,.overnote-display,.overnote-inline,.overnote-bottom)");
+  for (const note of overnotes) {
+    const noteTag = document.createElement("div");
+    noteTag.className = note.className;
+    noteTag.innerHTML = note.innerHTML.split('\n').join('<br>');
+
+    note.parentElement.replaceWith(noteTag);
+  }
 };
 
 
@@ -234,6 +258,8 @@ const initTeaching = async function(deck) {
 
   inferTitleFromMarkdown();
   pushParentClasses();
+  pushParentStyles();
+  extractMarkdownOvernotes();
   convertOvernotesToFragments();
   canonicalizeReferenceLists();
 
