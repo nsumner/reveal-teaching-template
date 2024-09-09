@@ -169,6 +169,10 @@ $heading4Size: 1.0em;
 .reveal section pre:has(.centercode) {
   justify-content: center;
 }
+.reveal .hljs:not(:first-child).centercode.fragment {
+  position: absolute;
+  left: auto;
+}
 .reveal code {
   font-family: "Fira Code", "Hack", monospace;
   font-size: smaller;
@@ -257,16 +261,17 @@ $heading4Size: 1.0em;
 
 .reveal .horizontal-list {
   display: flex;
+  align-items: top;
+  justify-content: space-between;
   list-style: none;
-  width:100%;
-  margin:0;
-  padding:0;
+  width: 100%;
+  margin: 0;
+  padding: 0;
 }
 .reveal .horizontal-list > li {
   display: inline-block;
+  flex: 0 1 auto;
   list-style-type: none;
-  margin-right: auto;
-  margin-left: auto;
 }
 
 // Larger gaps can be added between two list elements
@@ -280,6 +285,10 @@ $heading4Size: 1.0em;
 .reveal .invislist li,
 .reveal li.invislist {
   list-style-type: none;
+}
+
+.reveal .invis {
+  visibility: hidden;
 }
 
 
@@ -347,6 +356,10 @@ $heading4Size: 1.0em;
   font-size: 0.9em;
 }
 
+.reveal :is(.overnote-bottom, .overnote-inline, .overnote, .overnote-display).center {
+  text-align: center;
+}
+
 .overnote-bottom,
 .overnote-inline,
 .overnote{
@@ -394,6 +407,7 @@ $heading4Size: 1.0em;
 .animate-svg-hidden {
   visibility: hidden;
 }
+.animate-svg-high,
 .animate-svg-shown {
   visibility: inherit;
 }
