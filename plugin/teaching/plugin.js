@@ -75,12 +75,29 @@ const addPrintTag = function(slide) {
 };
 
 
+const unescapeHTML = function(str) {
+  return new DOMParser()
+    .parseFromString(str, "text/html")
+    .documentElement
+    .textContent;
+}
+
+
 const extractMarkdownOvernotes = function() {
   const overnotes = document.querySelectorAll("pre > code:is(.overnote,.overnote-display,.overnote-inline,.overnote-bottom)");
   for (const note of overnotes) {
     const noteTag = document.createElement("div");
     noteTag.className = note.className;
-    noteTag.innerHTML = note.innerHTML.split('\n').join('<br>');
+
+    noteTag.innerHTML = note.innerHTML.split('\n')
+                                      .map(line => unescapeHTML(line))
+                                      .join('<br>');
+
+    const fragmentIndex = note.getAttribute('data-line-numbers');
+    if (fragmentIndex) {
+      noteTag.setAttribute('data-fragment-index', fragmentIndex);
+      noteTag.removeAttribute('data-line-numbers');
+    }
 
     note.parentElement.replaceWith(noteTag);
   }
