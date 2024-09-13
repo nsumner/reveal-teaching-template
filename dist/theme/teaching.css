@@ -392,7 +392,8 @@ section.has-dark-background, section.has-dark-background h1, section.has-dark-ba
   text-align: center;
 }
 
-#print-tag, #print-tag > a {
+#print-tag, #print-tag > a,
+#fonts-tag, #fonts-tag > a {
   color: #CCCCCC;
   font-size: smaller;
 }
@@ -449,6 +450,12 @@ section.has-dark-background, section.has-dark-background h1, section.has-dark-ba
   font-size: 24%;
 }
 
+.reveal em {
+  font-style: italic;
+  font-weight: normal;
+  color: #0000CC;
+}
+
 .reveal strong {
   font-style: italic;
   font-weight: normal;
@@ -464,14 +471,27 @@ section.has-dark-background, section.has-dark-background h1, section.has-dark-ba
  *********************************************/
 .reveal section pre {
   display: flex;
-  justify-content: left;
   width: auto;
+  justify-content: left;
   box-shadow: none;
+}
+
+.reveal section pre:has(.centercode) {
+  justify-content: center;
+}
+
+.reveal .hljs:not(:first-child).centercode.fragment {
+  position: absolute;
+  left: auto;
+}
+
+.reveal code {
+  font-family: "Fira Code", "Hack", monospace;
+  font-size: smaller;
 }
 
 .reveal section pre > code {
   font-size: 20pt !important;
-  font-family: "Fira Code", "Hack", monospace;
   border: solid 3px black;
   background: antiquewhite;
 }
@@ -482,7 +502,7 @@ section.has-dark-background, section.has-dark-background h1, section.has-dark-ba
 
 .reveal section pre > code .highlight-line {
   background: yellow;
-  text-shadow: -0.5px -0.5px 0.5px #F00, 0.5px -0.5px 0.5px #F00, -0.5px 0.5px 0.5px #F00, 0.5px 0.5px 0.5px #F00;
+  text-shadow: -0.2px -0.2px 0.5px #F00, 0.2px -0.2px 0.5px #F00, -0.2px 0.2px 0.5px #F00, 0.2px 0.2px 0.5px #F00;
 }
 
 .reveal section .good pre > code {
@@ -492,7 +512,7 @@ section.has-dark-background, section.has-dark-background h1, section.has-dark-ba
 
 .reveal section .meh pre > code {
   border: solid 3px orange;
-  background: sandybrown;
+  background: gold;
 }
 
 .reveal section .bad pre > code {
@@ -513,13 +533,17 @@ section.has-dark-background, section.has-dark-background h1, section.has-dark-ba
   visibility: hidden;
 }
 
-.reveal .slides section .fragment:is(.semi-fade-out, .fade-in-then-semi-out).visible {
-  opacity: 0.5;
+.reveal .slides section .fragment:is(.semi-fade-out, .fade-in-then-semi-out).visible,
+.reveal .slides section:has(.current-fragment) :not(.fragment).fade-in-then-semi-out,
+.reveal .slides section .semi-fade-out {
+  opacity: 0.4;
   visibility: inherit;
 }
 
 .reveal .slides section .fragment:is(.semi-fade-out, .fade-in-then-semi-out).visible.current-fragment,
-.reveal .slides section .fragment:is(.semi-fade-out, .fade-in-then-semi-out).visible:has(.current-fragment) {
+.reveal .slides section .fragment:is(.semi-fade-out, .fade-in-then-semi-out).visible:has(.current-fragment),
+.reveal .slides section:has(.current-fragment) :not(.fragment).fade-in-then-semi-out:has(.current-fragment),
+.reveal .slides section .semi-fade-out:has(.current-fragment) {
   opacity: 1;
   visibility: inherit;
 }
@@ -527,9 +551,33 @@ section.has-dark-background, section.has-dark-background h1, section.has-dark-ba
 /*********************************************
  * Helper classes for custom formatting
  *********************************************/
+.reveal .horizontal-list {
+  display: flex;
+  align-items: top;
+  justify-content: space-between;
+  list-style: none;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.reveal .horizontal-list > li {
+  display: inline-block;
+  flex: 0 1 auto;
+  list-style-type: none;
+}
+
+.reveal li.smallgap {
+  margin-top: 0.5em;
+}
+
 .reveal .invislist li,
 .reveal li.invislist {
   list-style-type: none;
+}
+
+.reveal .invis {
+  visibility: hidden;
 }
 
 .reveal .transient {
@@ -544,6 +592,10 @@ section.has-dark-background, section.has-dark-background h1, section.has-dark-ba
 .fade-in-then-semi-out.current-fragment .transient {
   opacity: 1;
   visibility: inherit;
+}
+
+.reveal .collapse:not(.current-fragment .collapse):not(.current-fragment.collapse):not(.collapse:has(.current-fragment)) {
+  display: none;
 }
 
 .reveal .overnote-holder,
@@ -583,7 +635,10 @@ section.has-dark-background, section.has-dark-background h1, section.has-dark-ba
   font-size: 0.9em;
 }
 
-.overnote-display,
+.reveal :is(.overnote-bottom, .overnote-inline, .overnote, .overnote-display).center {
+  text-align: center;
+}
+
 .overnote-bottom,
 .overnote-inline,
 .overnote {
@@ -592,8 +647,8 @@ section.has-dark-background, section.has-dark-background h1, section.has-dark-ba
   display: none;
 }
 
-.reveal :is(.overnote-display, .overnote-bottom, .overnote-inline, .overnote).current-fragment,
-.reveal :is(.overnote-display, .overnote-bottom, .overnote-inline, .overnote):has(.current-fragment) {
+.reveal :is(.overnote-bottom, .overnote-inline, .overnote).current-fragment,
+.reveal :is(.overnote-bottom, .overnote-inline, .overnote):has(.current-fragment) {
   opacity: 1;
   visibility: inherit;
   display: block;
@@ -626,13 +681,14 @@ section.has-dark-background, section.has-dark-background h1, section.has-dark-ba
   visibility: hidden;
 }
 
+.animate-svg-high,
 .animate-svg-shown {
   visibility: inherit;
 }
 
 .animate-svg-faded {
   visibility: inherit;
-  opacity: 50%;
+  opacity: 30%;
 }
 
 /*********************************************
@@ -660,6 +716,7 @@ section.has-dark-background, section.has-dark-background h1, section.has-dark-ba
 .reveal .reference-list .reference,
 .reveal .reference-list li {
   display: flex;
+  line-height: 1.7em;
 }
 
 .reveal .reference-list a {

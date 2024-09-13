@@ -63,23 +63,31 @@ They disappear afterward and consume no space.
 * that simulates
 * some real content
 * You can use an overnote
-    <div class="overnote">
-    within other content.<br>
+    ```overnote center
+    within other content.
 
-    <ul>
-      <li>It could also
-      <li>contain a list or other content.
-    </ul>
-    </div>
+    And <strong>it can contain</strong>
+    <div class="fragment">other content</div>
+    ```
 * Or
-    <div class="overnote-inline">
+    ```overnote-inline
     They can also be used "inline" within the flow of the text.
-    </div>
+    ```
 * Where the content resumes afterward.
 
-<div class="overnote-bottom">
+```overnote-bottom
 They can also be anchored to the bottom.
-</div>
+```
+
+```overnote
+Overnotes can be specified in markdown.
+
+    <code>```overnote center
+    A multiline overnote.
+    Lines are inferred.
+    The `center` tag centers the overnote text.
+    ```</code>
+```
 
 ---
 ## Scriptable Animations
