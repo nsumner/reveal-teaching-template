@@ -413,7 +413,7 @@ $heading4Size: 1.0em;
 }
 .animate-svg-faded {
   visibility: inherit;
-  opacity: 40%;
+  opacity: 30%;
 }
 
 /*********************************************
@@ -441,6 +441,7 @@ $heading4Size: 1.0em;
 .reveal .reference-list li
 {
   display: flex;
+  line-height: 1.7em;
 }
 .reveal .reference-list a {
   color: grey;
