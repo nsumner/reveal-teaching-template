@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Open Office format SVG Simplifier</title>
+</head>
+<body>
+  <h2>Select an OpenOffice format SVG file to simplify</h2>
+
+  <input type="file" id="fileInput" accept=".svg">
+  <br><br>
+
+  <textarea id="fileContent" rows="20" cols="80" placeholder="File content will be displayed here...">
+  </textarea>
+
+  <p>
+  Simplified
+  </p>
+  <div id="simplifiedSVG" style="border: 1px solid black; padding: 10px; width: 100%; height: auto;">
+  </div>
+
+<script>
+
+const chunk = function (sequence, chunkSize) {
+  if (chunkSize <= 0) {
+    return [];
+  }
+
+  const result = [];
+  const consumable = Array.from(sequence);
+  while (chunkSize <= consumable.length) {
+    result.push(consumable.splice(0, chunkSize));
+  }
+
+  return result;
+};
+
+
+///////////////////////////////////////////////////////////////////////////////
+// DOM utilities
+///////////////////////////////////////////////////////////////////////////////
+
+const copyAttr = function (attr, element) {
+  element.setAttribute(attr.nodeName, attr.nodeValue);
+};
+
+
+const getAttrKey = function (attrs) {
+  return Array.from(attrs)
+              .map(attr => `${attr.nodeName}=${attr.nodeValue}`)
+              .join(' ');
+};
+
+
+const equalClasses = function (element1, element2) {
+  return element1.classList.value == element2.classList.value;
+};
+
+
+const buildAttrStyle = function (attr) {
+  let attrRHS = attr.nodeValue;
+  // Is there a need to play with attrRHS in the future.
+  return `${attr.nodeName}:${attrRHS}`;
+};
+
+
+const buildAttrListStyle = function(styleName, attrs) {
+  return `.PREFIX .${styleName} \{${  attrs.map(attr => buildAttrStyle(attr)).join(';') }\}\n`
+};
+
+
+// NOTE: 'style' itself appears to never be used for styling that we'd want
+// to preserve in the OpenOffice SVG format. This is a possible point of
+// error.
+const NON_STYLE_ATTRS = [
+  'd', 'x', 'y', 'style'
+];
+
+const moveSVGStylesToClasses = function(svg, elements, label) {
+  function getStyleAttrs(element) {
+    return Array.from(element.attributes)
+                .filter(attr => !NON_STYLE_ATTRS.includes(attr.nodeName));
+  }
+
+  const styles = new Map();
+  for (const element of elements) {
+    const styleAttrs = getStyleAttrs(element);
+    styles.set(getAttrKey(styleAttrs), styleAttrs);
+  }
+
+  const styleNames = new Map();
+  const namePrefix = label + '-style-';
+  let count = 0;
+  for (const [key, value] of styles.entries()) {
+    styleNames.set(key, namePrefix + count);
+    ++count;
+  }
+
+  // Replace the existing attributes with the extracted styles.
+  for (const element of elements) {
+    const styleAttrs = getStyleAttrs(element);
+    styleAttrs.forEach(attr => element.removeAttribute(attr.nodeName));
+    element.classList.add(styleNames.get(getAttrKey(styleAttrs)));
+  }
+
+  // Add styles explicitly at the top of the figure
+  const style = svg.querySelector('style');
+  style.innerHTML += Array.from(styles.entries())
+                          .map(([key, value]) => buildAttrListStyle(styleNames.get(key), value))
+                          .join('');
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// Text simplification
+///////////////////////////////////////////////////////////////////////////////
+
+const collapseSpanChain = function (span) {
+  if (span.children.length == 1 && span.firstChild.nodeName == "tspan") {
+    collapseSpanChain(span.firstChild);
+
+    // Merge attributes of the current node into the child
+    // and replace this node with the child to collapse the chain.
+    // A handful of attrs can be skipped as not worth retaining for
+    // simplicity. `style`  may be counterintuitive, but OO does not
+    // *seem* to use it for something useful. Revisit later if needed.
+    const skipAttrs = ['id', 'class', 'style'];
+    Array.from(span.attributes)
+         .filter(attr => !skipAttrs.includes(attr.nodeName))
+         .forEach(attr => copyAttr(attr, span.firstChild));
+    span.replaceWith(span.firstChild);
+  }
+};
+
+
+const simplifyText = function(svg) {
+  // First collapse all top level text spans
+  const originalSpans = Array.from(document.querySelectorAll('text > tspan'));
+  for (const span of originalSpans) {
+    collapseSpanChain(span);
+  }
+
+  // Move styles to CSS classes
+  const spans = Array.from(document.querySelectorAll('text > tspan'));
+  spans.forEach(span => span.removeAttribute('style'));
+  moveSVGStylesToClasses(svg, spans, 'text');
+
+  // Hoist text styles to text elements where all children have
+  // the same class lists
+  const texts = Array.from(svg.querySelectorAll('text'))
+                     .filter(text => Array.from(text.childNodes)
+                                          .every(span => equalClasses(span, text.firstChild)));
+  for (const text of texts) {
+    const classes = [...text.firstChild.classList];
+    text.classList.add(...classes);
+    for (const span of text.childNodes) {
+      span.classList.remove(...classes);
+    }
+  }
+
+  // Collapse any remaining unnecessary tspans
+   const loneTexts = svg.querySelectorAll('text:has(> tspan:only-child)');
+   for (const text of loneTexts) {
+     const span = text.firstChild;
+     Array.from(span.attributes)
+          .filter(attr => attr.nodeName != 'class')
+          .forEach(attr => copyAttr(attr, text));
+     text.append(...span.childNodes);
+     span.remove();
+   }
+};
+
+
+///////////////////////////////////////////////////////////////////////////////
+// Shape simplification
+///////////////////////////////////////////////////////////////////////////////
+
+
+const SHAPE_CLASS = 'com\\.sun\\.star\\.drawing\\.CustomShape';
+
+const simplifyShapes = function(svg) {
+  function collapseShape(filled, stroked) {
+    Array.from(stroked.attributes)
+        .filter(attr => attr.nodeName != 'fill')
+        .forEach(attr => copyAttr(attr, filled));
+    stroked.remove();
+  }
+
+  const shapeGroups = Array.from(svg.querySelectorAll(`.${SHAPE_CLASS} g[id]`));
+
+  // The pairs of elements are often identical paths where the first
+  // defines an area and the second defines a border. Merge them into
+  // a single path with an area and a border.
+  const canCollapse = ([first, second]) => {
+    return first.nodeName == 'path' && second.nodeName == 'path'
+      && first.getAttribute('d')
+      && first.getAttribute('d') === second.getAttribute('d')
+  };
+  for (const shape of shapeGroups) {
+    chunk(shape.children, 2)
+      .filter(canCollapse)
+      .forEach(([first, second]) => collapseShape(first, second));
+  }
+
+  // Move styles to CSS classes
+  const paths = Array.from(document.querySelectorAll(`.${SHAPE_CLASS} > g[id] > path`));
+  moveSVGStylesToClasses(svg, paths, 'shape');
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+// Connector simplification
+///////////////////////////////////////////////////////////////////////////////
+
+
+const CONNECTOR_CLASS = 'com\\.sun\\.star\\.drawing\\.ConnectorShape';
+
+const simplifyConnectors = function(svg) {
+  // Move styles to CSS classes
+  const paths = Array.from(document.querySelectorAll(`.${CONNECTOR_CLASS} > g[id] > path`));
+  moveSVGStylesToClasses(svg, paths, 'connector');
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// General DOM cleaning
+///////////////////////////////////////////////////////////////////////////////
+
+const OOClasses = [
+  'SVGTextShape',
+  SHAPE_CLASS,
+  CONNECTOR_CLASS
+];
+const removeOOClasses = function(svg) {
+  for (const className of OOClasses) {
+    for (const element of svg.querySelectorAll('.' + className)) {
+      element.classList.remove(className.split('\\').join(''));
+    }
+  }
+};
+
+
+const collapseGroupChains = function(svg) {
+  // Chains start at elements that have one child and are not
+  // only children themselves.
+  const chains = svg.querySelectorAll('g > g:only-child:not(g:has(> g:only-child))');
+  for (const chain of chains) {
+    let last = null;
+    let cursor = chain;
+    while (cursor.parentElement
+           && cursor.parentElement.childElementCount == 1
+           && cursor.parentElement.nodeName == 'g') {
+      last = cursor;
+      cursor = cursor.parentElement;
+    }
+    last.replaceWith(...chain.childNodes);
+  }
+}
+
+
+const cleanEmptyClasses = function(svg) {
+  const emptyClassed = svg.querySelectorAll('[class=""]');
+  for (const element of emptyClassed) {
+    element.removeAttribute('class');
+  }
+};
+
+
+const simplify = function(svg) {
+  // First remove easily identifiable elements that get in the way.
+  // * defs  -- Just used to embed fonts and other data
+  // * .BoundingBox  -- Not really beneficial in context
+  Array.from(svg.querySelectorAll('defs, .BoundingBox'))
+       .forEach(element => element.remove());
+
+  // Create an explicit style section for common style management.
+  const style = document.createElement('style');
+  svg.prepend(style);
+  style.innerHTML = '\n';
+
+  // Ensure that all styled elements will be under a common class that can
+  // keep styles local to the one figure. We could make the prefix customizable
+  // in the future.
+  const wrapper = svg.querySelector('g.Page');
+  wrapper.classList.remove('Page');
+  wrapper.classList.add('PREFIX');
+
+  simplifyText(svg);
+  simplifyShapes(svg);
+  simplifyConnectors(svg);
+
+  removeOOClasses(svg);
+  collapseGroupChains(svg);
+  cleanEmptyClasses(svg);
+
+  svg.getAttributeNames()
+     .filter(attr => attr.startsWith('xmlns:'))
+     .forEach(attr => svg.removeAttribute(attr));
+
+  for (const element of svg.querySelectorAll('[ooo\\:name]')) {
+    element.removeAttribute('ooo:name');
+  }
+
+  return svg.outerHTML;
+};
+
+
+document.getElementById('fileInput').addEventListener('change', function(event) {
+  const file = event.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const fileContent = e.target.result;
+      const textArea = document.getElementById('fileContent');
+      const simplifiedArea = document.getElementById('simplifiedSVG');
+      simplifiedArea.innerHTML = fileContent;
+
+      const svgImage = simplifiedArea.querySelector('svg');
+      if (svgImage) {
+        textArea.value = simplify(svgImage)
+                                 .split('\n')
+                                 .filter(line => line.trim() != '')
+                                 .join('\n');
+        simplifiedArea.innerHTML = textArea.value;
+      } else {
+        textArea.value = 'Could not load image as an SVG';
+      }
+    };
+    reader.readAsText(file);
+  } else {
+    textArea.value = 'No file loaded';
+  }
+});
+
+</script>
+</body>
+</html>
