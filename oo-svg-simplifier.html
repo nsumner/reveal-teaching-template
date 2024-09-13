@@ -207,16 +207,20 @@ const simplifyShapes = function(svg) {
 
 
 ///////////////////////////////////////////////////////////////////////////////
-// Connector simplification
+// Line simplification
 ///////////////////////////////////////////////////////////////////////////////
 
 
-const CONNECTOR_CLASS = 'com\\.sun\\.star\\.drawing\\.ConnectorShape';
+const LINE_CLASSES = [
+  'com\\.sun\\.star\\.drawing\\.ConnectorShape',
+  'com\\.sun\\.star\\.drawing\\.LineShape'
+];
 
 const simplifyConnectors = function(svg) {
   // Move styles to CSS classes
-  const paths = Array.from(document.querySelectorAll(`.${CONNECTOR_CLASS} > g[id] > path`));
-  moveSVGStylesToClasses(svg, paths, 'connector');
+  const classSelectors = LINE_CLASSES.map(name => '.' + name).join(', ');
+  const paths = Array.from(document.querySelectorAll(`:is(${classSelectors}) > g[id] > path`));
+  moveSVGStylesToClasses(svg, paths, 'line');
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -226,7 +230,7 @@ const simplifyConnectors = function(svg) {
 const OOClasses = [
   'SVGTextShape',
   SHAPE_CLASS,
-  CONNECTOR_CLASS
+  ...LINE_CLASSES
 ];
 const removeOOClasses = function(svg) {
   for (const className of OOClasses) {
