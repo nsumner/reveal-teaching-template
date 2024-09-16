@@ -70,12 +70,12 @@ They disappear afterward and consume no space.
     <div class="fragment">other content</div>
     ```
 * Or
-    ```overnote-inline
+    ```overnote inline
     They can also be used "inline" within the flow of the text.
     ```
 * Where the content resumes afterward.
 
-```overnote-bottom
+```overnote bottom
 They can also be anchored to the bottom.
 ```
 

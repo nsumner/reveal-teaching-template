@@ -541,11 +541,20 @@ section.has-dark-background, section.has-dark-background h1, section.has-dark-ba
 }
 
 .reveal .slides section .fragment:is(.semi-fade-out, .fade-in-then-semi-out).visible.current-fragment,
-.reveal .slides section .fragment:is(.semi-fade-out, .fade-in-then-semi-out).visible:has(.current-fragment),
+.reveal .slides section .fragment:is(.semi-fade-out, .fade-in-then-semi-out).visible:has(.current-fragment, .start-point),
 .reveal .slides section:has(.current-fragment) :not(.fragment).fade-in-then-semi-out:has(.current-fragment),
 .reveal .slides section .semi-fade-out:has(.current-fragment) {
   opacity: 1;
   visibility: inherit;
+}
+
+.reveal .slides section:has(.current-fragment) .start-point {
+  opacity: 0.4;
+}
+
+.reveal .slides section .start-point,
+.reveal .slides section:has(.current-fragment) .start-point:has(.current-fragment) {
+  opacity: 1;
 }
 
 /*********************************************
@@ -569,6 +578,14 @@ section.has-dark-background, section.has-dark-background h1, section.has-dark-ba
 
 .reveal li.smallgap {
   margin-top: 0.5em;
+}
+
+.reveal li.gap {
+  margin-top: 1em;
+}
+
+.reveal li.biggap {
+  margin-top: 1.5em;
 }
 
 .reveal .invislist li,
@@ -598,7 +615,6 @@ section.has-dark-background, section.has-dark-background h1, section.has-dark-ba
   display: none;
 }
 
-.reveal .overnote-holder,
 .reveal .overnote {
   width: fit-content;
   position: absolute;
@@ -607,24 +623,26 @@ section.has-dark-background, section.has-dark-background h1, section.has-dark-ba
   transform: translate(-50%, -50%);
 }
 
-.reveal .overnote-bottom {
-  width: fit-content;
-  position: absolute;
+.reveal .overnote.bottom {
+  top: auto;
   bottom: 0.05em;
   left: 50%;
   transform: translateX(-50%);
 }
 
-.reveal .overnote-inline {
-  width: fit-content;
-  position: absolute;
+.reveal .overnote.top {
+  top: 4em;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.reveal .overnote.inline {
+  top: auto;
   left: 50%;
   transform: translateX(-50%);
 }
 
 .reveal .overnote-display,
-.reveal .overnote-bottom,
-.reveal .overnote-inline,
 .reveal .overnote {
   background: #FFFBCC;
   color: black;
@@ -635,20 +653,19 @@ section.has-dark-background, section.has-dark-background h1, section.has-dark-ba
   font-size: 0.9em;
 }
 
-.reveal :is(.overnote-bottom, .overnote-inline, .overnote, .overnote-display).center {
+.reveal .overnote.center,
+.reveal .overnote-display.center {
   text-align: center;
 }
 
-.overnote-bottom,
-.overnote-inline,
 .overnote {
   opacity: 0;
   visibility: hidden;
   display: none;
 }
 
-.reveal :is(.overnote-bottom, .overnote-inline, .overnote).current-fragment,
-.reveal :is(.overnote-bottom, .overnote-inline, .overnote):has(.current-fragment) {
+.reveal .overnote.current-fragment,
+.reveal .overnote:has(.current-fragment) {
   opacity: 1;
   visibility: inherit;
   display: block;
@@ -668,6 +685,17 @@ section.has-dark-background, section.has-dark-background h1, section.has-dark-ba
 .mermaid foreignObject {
   overflow: visible;
   line-height: 90%;
+}
+
+.noborder > tbody > tr > td {
+  border: none;
+}
+
+.reveal table td {
+  padding: 0;
+  padding-left: 0.2em;
+  padding-right: 0.2em;
+  border: 0;
 }
 
 /*********************************************
@@ -719,6 +747,15 @@ section.has-dark-background, section.has-dark-background h1, section.has-dark-ba
   line-height: 1.7em;
 }
 
+.reveal h2 .reference-list {
+  font-size: 0.6em;
+}
+
+.reveal h2 .reference-list li {
+  display: flex;
+  line-height: 1.2em;
+}
+
 .reveal .reference-list a {
   color: grey;
 }
@@ -731,44 +768,6 @@ section.has-dark-background, section.has-dark-background h1, section.has-dark-ba
 .reveal .reference-list .reference:last-child::after,
 .reveal .reference-list li:last-child::after {
   content: "";
-}
-
-/*********************************************
- * Three column layout
- *********************************************/
-.thirdcolumn {
-  display: inline-block;
-  vertical-align: bottom;
-  width: 30%;
-  margin: 0;
-  border: 0;
-  padding: 5px;
-  text-align: center;
-}
-
-.row {
-  width: 100%;
-}
-
-.row:after {
-  content: "";
-  display: table;
-  clear: both;
-}
-
-.reveal .thirdcolumn h4 {
-  text-align: center;
-  margin-bottom: 5px;
-}
-
-.reveal .thirdcolumn pre {
-  margin: 0px;
-  width: 100%;
-}
-
-.reveal .thirdcolumn code {
-  text-align: left;
-  padding: 2px;
 }
 
 /*********************************************
@@ -794,13 +793,10 @@ section.has-dark-background, section.has-dark-background h1, section.has-dark-ba
 /*********************************************
  * PRINTING
  *********************************************/
-.reveal .pdf-page .overnote-holder,
-.reveal .pdf-page .overnote {
-  width: fit-content;
-  position: absolute;
-  top: 60%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+html.print-pdf .reveal .overnote .printable {
+  opacity: 1;
+  display: block;
+  visibility: inherit;
 }
 
 html.print-pdf .reveal .slides section {

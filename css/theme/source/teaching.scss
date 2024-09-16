@@ -235,6 +235,8 @@ $heading4Size: 1.0em;
   visibility: hidden;
 }
 
+// TODO clean up and rescan non-fragment fading after introducing start points
+
 // Inactive elements should partly fade out
 .reveal .slides section .fragment:is(.semi-fade-out, .fade-in-then-semi-out).visible,
 .reveal .slides section:has(.current-fragment) :not(.fragment).fade-in-then-semi-out,
@@ -245,13 +247,27 @@ $heading4Size: 1.0em;
 
 // Active elements should remain fully visible.
 .reveal .slides section .fragment:is(.semi-fade-out, .fade-in-then-semi-out).visible.current-fragment,
-.reveal .slides section .fragment:is(.semi-fade-out, .fade-in-then-semi-out).visible:has(.current-fragment),
+.reveal .slides section .fragment:is(.semi-fade-out, .fade-in-then-semi-out).visible:has(.current-fragment, .start-point),
 .reveal .slides section:has(.current-fragment) :not(.fragment).fade-in-then-semi-out:has(.current-fragment),
 .reveal .slides section .semi-fade-out:has(.current-fragment) {
   opacity: 1;
   visibility: inherit;
 }
 
+// When breaking one slide across two, e.g. for animation, it can be necessary
+// to start at a position where
+//  1. it is not a fragment
+//  2. it contains no fragments
+//  3. no fragment is current
+// and yet we want that position to behave as if it were a fragment in the
+// normal flow.
+.reveal .slides section:has(.current-fragment) .start-point {
+  opacity:0.4;
+}
+.reveal .slides section .start-point,
+.reveal .slides section:has(.current-fragment) .start-point:has(.current-fragment) {
+  opacity:1;
+}
 
 /*********************************************
  * Helper classes for custom formatting
@@ -278,6 +294,12 @@ $heading4Size: 1.0em;
 
 .reveal li.smallgap {
   margin-top: 0.5em;
+}
+.reveal li.gap {
+  margin-top: 1em;
+}
+.reveal li.biggap {
+  margin-top: 1.5em;
 }
 
 // Lists or elements tagged with invislist will hide bullets
@@ -315,12 +337,10 @@ $heading4Size: 1.0em;
 
 // Overnotes are "popover" boxes with extra notes and information.
 // By default, an .overnote appears centered over the body of a slide.
-// An .overnote-bottom is anchored to the bottom of a slide.
-// An .overnote-inline flows vertically with surrounding content.
-// An .overnote-display controls the basic styling of all overnotes
+// They can be combined with .top, .bottom, or .inline to change position.
+// They can be combined with .center to center their contents.
 
 // **Positioning** of different overnote types.
-.reveal .overnote-holder,
 .reveal .overnote {
   width: fit-content;
   position: absolute;
@@ -328,24 +348,25 @@ $heading4Size: 1.0em;
   left: 50%;
   transform: translate(-50%, -50%);
 }
-.reveal .overnote-bottom {
-  width: fit-content;
-  position: absolute;
+.reveal .overnote.bottom {
+  top: auto;
   bottom: 0.05em;
   left: 50%;
   transform: translateX(-50%);
 }
-.reveal .overnote-inline {
-  width: fit-content;
-  position: absolute;
+.reveal .overnote.top {
+  top: 4em;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.reveal .overnote.inline {
+  top: auto;
   left: 50%;
   transform: translateX(-50%);
 }
 
 // **Styling** of all overnote types.
 .reveal .overnote-display,
-.reveal .overnote-bottom,
-.reveal .overnote-inline,
 .reveal .overnote {
   background: #FFFBCC;
   color: black;
@@ -356,20 +377,19 @@ $heading4Size: 1.0em;
   font-size: 0.9em;
 }
 
-.reveal :is(.overnote-bottom, .overnote-inline, .overnote, .overnote-display).center {
+.reveal .overnote.center,
+.reveal .overnote-display.center {
   text-align: center;
 }
 
-.overnote-bottom,
-.overnote-inline,
-.overnote{
+.overnote {
   opacity: 0;
   visibility: hidden;
   display: none;
 }
 
-.reveal :is(.overnote-bottom, .overnote-inline, .overnote).current-fragment,
-.reveal :is(.overnote-bottom, .overnote-inline, .overnote):has(.current-fragment) {
+.reveal .overnote.current-fragment,
+.reveal .overnote:has(.current-fragment) {
   opacity: 1;
   visibility: inherit;
   display: block;
@@ -397,6 +417,18 @@ $heading4Size: 1.0em;
   line-height: 90%;
 }
 
+// Tables have a default formatting in Reveal that can get in the way when
+// using them for visualization. They can be reset with `noborder`
+.noborder > tbody > tr > td {
+  border: none;
+}
+
+.reveal table td {
+  padding: 0;
+  padding-left: 0.2em;
+  padding-right: 0.2em;
+  border: 0;
+}
 /*********************************************
  * Figures and animation
  *********************************************/
@@ -443,6 +475,13 @@ $heading4Size: 1.0em;
   display: flex;
   line-height: 1.7em;
 }
+.reveal h2 .reference-list {
+  font-size: 0.6em;
+}
+.reveal h2 .reference-list li {
+  display: flex;
+  line-height: 1.2em;
+}
 .reveal .reference-list a {
   color: grey;
 }
@@ -484,15 +523,11 @@ $heading4Size: 1.0em;
  * PRINTING
  *********************************************/
 
-.reveal .pdf-page .overnote-holder,
-.reveal .pdf-page .overnote {
-  width: fit-content;
-  position: absolute;
-  top: 60%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+html.print-pdf .reveal .overnote .printable {
+  opacity: 1;
+  display: block;
+  visibility: inherit;
 }
-
 html.print-pdf .reveal .slides section {
   height: 100%;
 }
