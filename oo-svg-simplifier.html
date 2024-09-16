@@ -113,10 +113,15 @@ const moveSVGStylesToClasses = function(svg, elements, label) {
 // Text simplification
 ///////////////////////////////////////////////////////////////////////////////
 
-const collapseSpanChain = function (span) {
-  if (span.children.length == 1 && span.firstChild.nodeName == "tspan") {
-    collapseSpanChain(span.firstChild);
+const collapseSpanChains = function (span) {
+  const childSpans = Array.from(span.children)
+                          .filter(child => child.nodeName == 'tspan');
+  for (const child of childSpans) {
+    collapseSpanChains(child);
+  }
 
+  if (childSpans.length == 1 && span.children.length == 1) {
+    const onlyChild = span.firstChild;
     // Merge attributes of the current node into the child
     // and replace this node with the child to collapse the chain.
     // A handful of attrs can be skipped as not worth retaining for
@@ -125,8 +130,8 @@ const collapseSpanChain = function (span) {
     const skipAttrs = ['id', 'class', 'style'];
     Array.from(span.attributes)
          .filter(attr => !skipAttrs.includes(attr.nodeName))
-         .forEach(attr => copyAttr(attr, span.firstChild));
-    span.replaceWith(span.firstChild);
+         .forEach(attr => copyAttr(attr, onlyChild));
+    span.replaceWith(onlyChild);
   }
 };
 
@@ -135,11 +140,11 @@ const simplifyText = function(svg) {
   // First collapse all top level text spans
   const originalSpans = Array.from(document.querySelectorAll('text > tspan'));
   for (const span of originalSpans) {
-    collapseSpanChain(span);
+    collapseSpanChains(span);
   }
 
   // Move styles to CSS classes
-  const spans = Array.from(document.querySelectorAll('text > tspan'));
+  const spans = Array.from(document.querySelectorAll('tspan'));
   spans.forEach(span => span.removeAttribute('style'));
   moveSVGStylesToClasses(svg, spans, 'text');
 
@@ -229,6 +234,8 @@ const simplifyConnectors = function(svg) {
 
 const OOClasses = [
   'SVGTextShape',
+  'TextShape',
+  'com\\.sun\\.star\\.drawing\\.OpenBezierShape',
   SHAPE_CLASS,
   ...LINE_CLASSES
 ];
@@ -298,8 +305,10 @@ const simplify = function(svg) {
      .filter(attr => attr.startsWith('xmlns:'))
      .forEach(attr => svg.removeAttribute(attr));
 
-  for (const element of svg.querySelectorAll('[ooo\\:name]')) {
-    element.removeAttribute('ooo:name');
+  for (const element of svg.querySelectorAll('*')) {
+    element.getAttributeNames()
+           .filter(name => name.startsWith('ooo:'))
+           .forEach(name => element.removeAttribute(name));
   }
 
   return svg.outerHTML;
