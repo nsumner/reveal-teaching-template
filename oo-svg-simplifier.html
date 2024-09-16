@@ -170,21 +170,16 @@ const simplifyText = function(svg) {
     hoistCommonAttrs(text, Array.from(text.children), skipAttrs);
   }
 
+  // And now we can remove direct text->span links
+  for (const text of svg.querySelectorAll('text:has(> tspan:only-child)')) {
+    text.append(...text.firstChild.childNodes);
+    text.firstChild.remove();
+  }
+
   // Move styles to CSS classes
   const spans = Array.from(document.querySelectorAll('tspan, text'));
   spans.forEach(span => span.removeAttribute('style'));
   moveSVGStylesToClasses(svg, spans, 'text');
-
-  // Collapse any remaining unnecessary tspans
-   const loneTexts = svg.querySelectorAll('text:has(> tspan:only-child)');
-   for (const text of loneTexts) {
-     const span = text.firstChild;
-     Array.from(span.attributes)
-          .filter(attr => attr.name != 'class')
-          .forEach(attr => copyAttr(attr, text));
-     text.append(...span.childNodes);
-     span.remove();
-   }
 };
 
 
