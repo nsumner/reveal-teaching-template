@@ -65,7 +65,7 @@ const addFontsTag = function(slide) {
 
 const addPrintTag = function(slide) {
   const printTag = document.createElement("span");
-  printTag.innerHTML = "[<a href=\"?print-pdf\">printable</a>]";
+  printTag.innerHTML = "[<a href=\"?print-pdf\">printable/PDF</a>]";
   printTag.style.position = "absolute";
   printTag.style.left = 0;
   printTag.style.bottom = "1em";
