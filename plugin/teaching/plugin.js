@@ -126,7 +126,7 @@ const canonicalizeReferenceLists = function() {
 const convertListsItemsToFragments = function() {
   // Some desired behavioral properties shouls be inferred from the raw
   // Markdown slides to make creating and managing content more convenient.
-  for (const listItem of document.querySelectorAll(":not(.blocklist, :has(> .blocklist)) > li")) {
+  for (const listItem of document.querySelectorAll(":not(.blocklist, :has(> .blocklist), .reference-list) > li")) {
     if (!listItem.classList.contains("noinc")) {
       listItem.classList.add("fragment");
       if (!listItem.classList.value.includes("fade")) {

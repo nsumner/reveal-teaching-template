@@ -1,25 +1,30 @@
 
 class SVGHandlers {
-  constructor(reset, show, hide, fade) {
+  constructor(reset, show, hide, fade, high) {
     this.reset = reset;
     this.show = show;
     this.hide = hide;
     this.fade = fade;
+    this.high = high;
   }
 }
 
 
 const hideAnimationElement = function(element) {
-  element.classList.remove("animate-svg-shown", "animate-svg-faded");
+  element.classList.remove("animate-svg-shown", "animate-svg-faded", "animate-svg-high");
   element.classList.add("animate-svg-hidden");
 };
 const showAnimationElement = function(element) {
-  element.classList.remove("animate-svg-hidden", "animate-svg-faded");
+  element.classList.remove("animate-svg-hidden", "animate-svg-faded", "animate-svg-high");
   element.classList.add("animate-svg-shown");
 };
 const fadeAnimationElement = function(element) {
-  element.classList.remove("animate-svg-shown", "animate-svg-hidden");
+  element.classList.remove("animate-svg-shown", "animate-svg-hidden", "animate-svg-high");
   element.classList.add("animate-svg-faded");
+};
+const highAnimationElement = function(element) {
+  element.classList.remove("animate-svg-shown", "animate-svg-hidden", "animate-svg-faded");
+  element.classList.add("animate-svg-high");
 };
 
 
@@ -60,6 +65,7 @@ const rawSVGHandlers = new SVGHandlers(
   buildSVGUpdate(showAnimationElement),
   buildSVGUpdate(hideAnimationElement),
   buildSVGUpdate(fadeAnimationElement),
+  buildSVGUpdate(highAnimationElement),
 );
 
 
@@ -97,10 +103,15 @@ const lazyInitializeMermaid = function(animation) {
 };
 
 
+// This function may need customization for figure types unless there is a good
+// pattern. Treat as suspect. The inferred specification for edge ids so far is:
+//   <alpha prefix> SEP <node 1 ID> SEP <node 2 ID> SEP <numeric suffix>
+// where SEP is a single character of punctuation presently in: - _
 const updateMermaidEdgesFromNodes = function(animation) {
   for (const [edge, label] of animation.edgeLabelPairs) {
-    const ready = Array.from(edge.id.substring(2, edge.id.length - 2).split("-"))
-                         .every((id) => !animation.nodes.get(id).classList.contains("animate-svg-hidden"));
+    const ready = Array.from(edge.id.split(/[-_]/))
+                       .slice(1, 3)
+                       .every((id) => !animation.nodes.get(id).classList.contains("animate-svg-hidden"));
     if (ready) {
       showAnimationElement(edge);
       showAnimationElement(label);
@@ -133,7 +144,8 @@ const mermaidNodeHandlers = new SVGHandlers(
   hideMermaidElements,
   buildMermaidNodeUpdate(showAnimationElement),
   buildMermaidNodeUpdate(hideAnimationElement),
-  buildMermaidNodeUpdate(fadeAnimationElement)
+  buildMermaidNodeUpdate(fadeAnimationElement),
+  buildMermaidNodeUpdate(highAnimationElement)
 );
 
 
@@ -143,7 +155,7 @@ const mermaidNodeHandlers = new SVGHandlers(
 
 // TODO: refactor into a more extensible animation handler.
 const prepareSVGAnimation = function(animation, classes) {
-  if (classes.contains("mermaid")) {
+  if (classes.contains("mermaidsvg")) {
     if (!animation.svgFigure.classList.contains("mermaid")) {
       console.error("Linked figure was not a mermaid figure.");
     }
