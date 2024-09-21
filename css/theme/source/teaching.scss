@@ -461,6 +461,7 @@ $heading4Size: 1.0em;
   margin-left: 0.5em;
   font-size: 0.8em;
   color: grey;
+  line-height: 1em;
 }
 .reveal .reference-list::after {
   content: "]";
@@ -470,17 +471,15 @@ $heading4Size: 1.0em;
 }
 
 .reveal .reference-list .reference,
-.reveal .reference-list li
-{
+.reveal .reference-list > li {
+  all: reset;
   display: flex;
-  line-height: 1.7em;
+  vertical-align: middle;
+  line-height: 1.1em;
+  color: grey;
 }
 .reveal h2 .reference-list {
   font-size: 0.6em;
-}
-.reveal h2 .reference-list li {
-  display: flex;
-  line-height: 1.2em;
 }
 .reveal .reference-list a {
   color: grey;
