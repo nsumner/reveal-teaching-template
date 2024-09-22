@@ -73,6 +73,15 @@ const hoistCommonAttrs = function(target, sources, toSkip) {
 };
 
 
+const mergeNodeInto = function (toMerge, target) {
+  Array.from(toMerge.attributes)
+      .filter(attr => !target.hasAttribute(attr.name))
+      .forEach(attr => copyAttr(attr, target));
+  target.append(...toMerge.childNodes);
+  toMerge.remove();
+};
+
+
 const buildAttrStyle = function (attr) {
   let attrRHS = attr.value;
   // Is there a need to play with attrRHS in the future.
@@ -81,7 +90,7 @@ const buildAttrStyle = function (attr) {
 
 
 const buildAttrListStyle = function(styleName, attrs) {
-  return `.PREFIX .${styleName} \{${  attrs.map(attr => buildAttrStyle(attr)).join(';') }\}\n`
+  return `.PREFIX .${styleName} \{${  attrs.map(attr => buildAttrStyle(attr)).join(';') }\}\n`;
 };
 
 
@@ -136,7 +145,7 @@ const moveSVGStylesToClasses = function(svg, elements, label) {
 
 
 const collapseSpanChains = function (rootSpan) {
-  const skipAttrs = ['id', 'class', 'style'];
+  const skipAttrs = ['id', 'class', 'style', 'x', 'y'];
 
   function collapseHelper (span) {
     const childSpans = Array.from(span.children)
@@ -148,9 +157,7 @@ const collapseSpanChains = function (rootSpan) {
     hoistCommonAttrs(span, childSpans, skipAttrs);
 
     if (childSpans.length === 1 && span.children.length === 1) {
-      const onlyChild = span.firstChild;
-      span.append(...onlyChild.childNodes);
-      onlyChild.remove();
+      mergeNodeInto(span.firstChild, span);
     }
   }
 
@@ -165,15 +172,14 @@ const simplifyText = function(svg) {
   }
 
   // Hoist to text nodes where possible
-  const skipAttrs = ['id', 'class', 'style'];
+  const skipAttrs = ['id', 'class', 'style', 'x', 'y'];
   for (const text of document.querySelectorAll('text')) {
     hoistCommonAttrs(text, Array.from(text.children), skipAttrs);
   }
 
   // And now we can remove direct text->span links
   for (const text of svg.querySelectorAll('text:has(> tspan:only-child)')) {
-    text.append(...text.firstChild.childNodes);
-    text.firstChild.remove();
+    mergeNodeInto(text.firstChild, text);
   }
 
   // Move styles to CSS classes
