@@ -85,7 +85,7 @@ const unescapeHTML = function(str) {
 
 
 const extractMarkdownOvernotes = function() {
-  const overnotes = document.querySelectorAll("pre > code:is(.overnote,.overnote-display,.overnote-inline,.overnote-bottom)");
+  const overnotes = document.querySelectorAll("pre > code:is(.overnote,.overnote-display)");
   for (const note of overnotes) {
     const noteTag = document.createElement("div");
     noteTag.className = note.className;
@@ -101,6 +101,20 @@ const extractMarkdownOvernotes = function() {
     }
 
     note.parentElement.replaceWith(noteTag);
+  }
+};
+
+
+const inferCodeIndices = function() {
+  const prefix = 'fragment-index=';
+  const snippets = Array.from(document.querySelectorAll(`pre > code[class*='${prefix}']`));
+  for (const snippet of snippets) {
+    const indexClass = Array.from(snippet.classList)
+                              .find(name => name.startsWith(prefix));
+    if (indexClass) {
+      snippet.setAttribute('data-fragment-index', indexClass.slice(prefix.length));
+      snippet.classList.remove(indexClass);
+    }
   }
 };
 
@@ -184,6 +198,7 @@ const initTeaching = async function(deck) {
   pushParentClasses();
   pushParentStyles();
   extractMarkdownOvernotes();
+  inferCodeIndices();
   convertOvernotesToFragments();
   canonicalizeReferenceLists();
 
