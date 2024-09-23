@@ -119,7 +119,7 @@ $heading4Size: 1.0em;
 .reveal {
   color: #0000CC;
 }
-.reveal li li {
+.reveal :not(.horizontal-list) > li li {
   color: #003366;
   margin-top: 0px;
 }
@@ -172,6 +172,10 @@ $heading4Size: 1.0em;
 .reveal .hljs:not(:first-child).centercode.fragment {
   position: absolute;
   left: auto;
+}
+.reveal section pre:has(.hljs.bottom) {
+  position: absolute;
+  bottom: 0em;
 }
 .reveal code {
   font-family: "Fira Code", "Hack", monospace;
@@ -363,6 +367,14 @@ $heading4Size: 1.0em;
   top: auto;
   left: 50%;
   transform: translateX(-50%);
+}
+.reveal .overnote.left {
+  left: 1em;
+  transform: none;
+}
+.reveal .overnote.right {
+  right: 1em;
+  transform: none;
 }
 
 // **Styling** of all overnote types.
