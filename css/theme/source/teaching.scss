@@ -441,6 +441,13 @@ $heading4Size: 1.0em;
   padding-right: 0.2em;
   border: 0;
 }
+.reveal table :is(td,th):has(strong) {
+  background: yellow;
+}
+.reveal .centered-table table :is(td, th) {
+  text-align: center;
+}
+
 /*********************************************
  * Figures and animation
  *********************************************/
