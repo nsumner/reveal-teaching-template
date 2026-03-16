@@ -86,7 +86,7 @@ $heading4Size: 1.0em;
 #print-tag, #print-tag > a,
 #fonts-tag, #fonts-tag > a {
   color: #CCCCCC;
-  font-size: smaller;
+  font-size: 20pt;
 }
 
 /*********************************************
@@ -133,7 +133,7 @@ $heading4Size: 1.0em;
 }
 
 // Condense line breaks inside of other elements.
-.reveal ul br {
+.reveal ul br:not(.overnote > br) {
   content: "";
   margin-top: -10px;
   display: block;
@@ -149,8 +149,12 @@ $heading4Size: 1.0em;
 .reveal strong {
   font-style: italic;
   font-weight: normal;
+  code {
+    font-style: normal;
+  }
 }
-.reveal .current-fragment strong {
+.reveal .current-fragment strong,
+.reveal strong:not(.reveal .fragment strong) {
   color: darkred;
   font-weight: bold;
 }
@@ -166,6 +170,13 @@ $heading4Size: 1.0em;
   justify-content: left;
   box-shadow: none;
 }
+.reveal section pre:has(.focuscode) {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  justify-content: center;
+  transform: translate(-50%,-50%);
+}
 .reveal section pre:has(.centercode) {
   justify-content: center;
 }
@@ -175,7 +186,10 @@ $heading4Size: 1.0em;
 }
 .reveal section pre:has(.hljs.bottom) {
   position: absolute;
-  bottom: 0em;
+  top: auto;
+  bottom: 0.5em;
+  left: 50%;
+  transform: translateX(-50%);
 }
 .reveal code {
   font-family: "Fira Code", "Hack", monospace;
@@ -210,15 +224,15 @@ $heading4Size: 1.0em;
 
 // Code emphasizing quality can be placed in an environment that
 // styles the code block based on quality.
-.reveal section .good pre > code {
+.reveal section .good pre > code, .reveal section pre > code.good {
   border: solid 3px #0033CC;
   background: lightskyblue;
 }
-.reveal section .meh pre > code {
+.reveal section .meh pre > code, .reveal section pre > code.meh {
   border: solid 3px orange;
   background: gold;
 }
-.reveal section .bad pre > code {
+.reveal section .bad pre > code, .reveal section pre > code.bad {
   border: solid 3px #CC3300;
   background: mistyrose;
 }
@@ -296,13 +310,13 @@ $heading4Size: 1.0em;
 
 // Larger gaps can be added between two list elements
 
-.reveal li.smallgap {
+.reveal li.smallgap, .reveal li :not(.horizontal-list) > li.smallgap {
   margin-top: 0.5em;
 }
-.reveal li.gap {
+.reveal li.gap, .reveal li :not(.horizontal-list) > li.gap {
   margin-top: 1em;
 }
-.reveal li.biggap {
+.reveal li.biggap, .reveal li :not(.horizontal-list) > li.biggap {
   margin-top: 1.5em;
 }
 
@@ -346,7 +360,6 @@ $heading4Size: 1.0em;
 
 // **Positioning** of different overnote types.
 .reveal .overnote {
-  width: fit-content;
   position: absolute;
   top: 60%;
   left: 50%;
@@ -446,6 +459,14 @@ $heading4Size: 1.0em;
 }
 .reveal .centered-table table :is(td, th) {
   text-align: center;
+}
+
+.reveal .emoji {
+  font-family: "Noto Color Emoji", sans-serif;
+}
+
+.katex-display {
+  margin: 0em;
 }
 
 /*********************************************

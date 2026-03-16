@@ -54,7 +54,8 @@ const pushParentStyles = function() {
 const addFontsTag = function(slide) {
   const fontTag = document.createElement("span");
   fontTag.innerHTML = "[<a href=\"https://github.com/tonsky/FiraCode\">Fira Code</a>, "
-                    + "<a href=\"https://fonts.google.com/specimen/Carlito\">Carlito</a>]";
+                    + "<a href=\"https://fonts.google.com/specimen/Carlito\">Carlito</a>, "
+                    + "<a href=\"https://fonts.google.com/noto/specimen/Noto+Color+Emoji\">Noto Color Emoji</a>]";
   fontTag.style.position = "absolute";
   fontTag.style.left = 0;
   fontTag.style.bottom = "0em";
@@ -93,6 +94,10 @@ const extractMarkdownOvernotes = function() {
     noteTag.innerHTML = note.innerHTML.split('\n')
                                       .map(line => unescapeHTML(line))
                                       .join('<br>');
+    // This cleanup is a bit cumbersome, but HTML in an overnote can
+    // yield sequences of breaks in odd places after replacement and fixing
+    // errors. Just re-reading it and fixing is easy.
+    noteTag.innerHTML = noteTag.innerHTML.replace(/(?:<br>){3,}/g, '<br><br>');
 
     const fragmentIndex = note.getAttribute('data-line-numbers');
     if (fragmentIndex) {
@@ -110,11 +115,40 @@ const inferCodeIndices = function() {
   const snippets = Array.from(document.querySelectorAll(`pre > code[class*='${prefix}']`));
   for (const snippet of snippets) {
     const indexClass = Array.from(snippet.classList)
-                              .find(name => name.startsWith(prefix));
+                            .find(name => name.startsWith(prefix));
     if (indexClass) {
       snippet.setAttribute('data-fragment-index', indexClass.slice(prefix.length));
       snippet.classList.remove(indexClass);
     }
+  }
+};
+
+
+const addGodboltLinks = function() {
+  // First correct all markdown variants
+  const prefix = 'godbolt=';
+  const markdownSnippets = Array.from(document.querySelectorAll(`pre > code[class*='${prefix}']`));
+  for (const snippet of markdownSnippets) {
+    const indexClass = Array.from(snippet.classList)
+                            .find(name => name.startsWith(prefix));
+    if (indexClass) {
+      snippet.setAttribute('data-godbolt', indexClass.slice(prefix.length));
+      snippet.classList.remove(indexClass);
+    }
+  }
+
+  // Then add in the tags
+  const codeSnippets = Array.from(document.querySelectorAll(`pre > code[data-godbolt]`));
+  for (const snippet of codeSnippets) {
+    const target = snippet.getAttribute('data-godbolt');
+    const linkTag = document.createElement("div");
+    linkTag.innerHTML = `<a href=\"${target}\" target="_blank" rel="noopener noreferrer">💻</a>`;
+    linkTag.style.transform = 'translate(-1.5em, 0)';
+    linkTag.style.position = 'relative';
+    linkTag.style.zIndex = '10';
+    linkTag.style.width = '0px';
+    snippet.parentElement.appendChild(linkTag);
+    console.log(linkTag);
   }
 };
 
@@ -199,6 +233,7 @@ const initTeaching = async function(deck) {
   pushParentStyles();
   extractMarkdownOvernotes();
   inferCodeIndices();
+  addGodboltLinks();
   convertOvernotesToFragments();
   canonicalizeReferenceLists();
 
