@@ -189,6 +189,8 @@ const buildAnimationFragments = function(text) {
     fragment.svgFragmentIDs = afterIndex.substring(openPos + 1, closePos)
                                         .split(",")
                                         .map(item => item.trim());
+    fragment.setAttribute('data-svg-operation', fragment.svgFragmentOperation);
+    fragment.setAttribute('data-svg-ids', fragment.svgFragmentIDs.join(','));
     fragment.setAttribute("data-fragment-index", fragment.svgFragmentIndex.toString());
     fragment.classList.add("fragment", "animate-svg");
     return fragment;

@@ -1,5 +1,6 @@
 import { animateSVGs } from "./animate-svg.js";
 import { rewriteDuplicateIDs } from "./deduplicate.js"
+import { batchPrint } from "./print-slides.js";
 
 window.RevealTeaching = window.RevealTeaching || (() => {
   let deck;
@@ -249,6 +250,8 @@ const initTeaching = async function(deck) {
       deferred.classList.add("fragment");
     }
   });
+
+  deck.on('pdf-ready', () => batchPrint(deck));
 
   // Add a printing link to the first page
   const firstPage = deck.getSlidesElement().querySelector("section:first-child");
