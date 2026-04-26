@@ -219,7 +219,7 @@ const inlineSVGs = async function() {
 
 
 const initTeaching = async function(deck) {
-  Reveal.configure({
+  deck.configure({
     // PDF printing can prioritize note taking when all fragments on
     // a slide are displayed in a single slide.
     // TODO: Identify slides with transient or disappearing elements
