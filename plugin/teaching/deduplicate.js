@@ -46,16 +46,19 @@ const extractDuplicatedIDs = function(subtree) {
 
 
 const extractDuplicatedClasses = function(subtree) {
-  const classPattern = /\.([a-zA-Z0-9_-]+)/g;
   const extractDefinedClasses = function(style) {
-    const names = style.textContent
-                       .split('\n')
-                       .map(line => line.slice(0, line.indexOf('{')))
-                       .filter(line => line != '')
-                       .map(line => line.match(classPattern))
-                       .flatMap(match => match ? match[0].slice(1) : []);
-    return names;
+    if (!style.sheet) {
+      return [];
+    }
+
+    const classesFrom = (rules) => Array.from(rules).flatMap(rule =>
+      rule.selectorText
+        ? Array.from(rule.selectorText.matchAll(/\.([a-zA-Z0-9_-]+)/g), m => m[1])
+        : rule.cssRules ? classesFrom(rule.cssRules) : []
+    );
+    return classesFrom(style.sheet.cssRules);
   };
+
   const localStyleElements = Array.from(subtree.querySelectorAll("style"));
   const otherStyleElements = new Set(document.querySelectorAll("style"))
                              .difference(new Set(localStyleElements));
