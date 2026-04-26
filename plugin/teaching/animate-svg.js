@@ -202,7 +202,7 @@ const buildAnimationFragments = function(text) {
 const updateAnimatedSVG = function(animation) {
   if (!(animation.svgFigure.nodeName == "svg"
         || animation.svgFigure.querySelector("svg"))) {
-    console.log("Figure not yet drawn at animation update");
+    console.error("Figure not yet drawn at animation update");
     return;
   }
 

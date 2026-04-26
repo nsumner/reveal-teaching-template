@@ -149,7 +149,6 @@ const addGodboltLinks = function() {
     linkTag.style.zIndex = '10';
     linkTag.style.width = '0px';
     snippet.parentElement.appendChild(linkTag);
-    console.log(linkTag);
   }
 };
 
@@ -246,7 +245,6 @@ const initTeaching = async function(deck) {
 
   deck.on('ready', () => {
     for (const deferred of document.querySelectorAll(".deferred-fragment")) {
-      console.log(deferred);
       deferred.classList.add("fragment");
     }
   });
