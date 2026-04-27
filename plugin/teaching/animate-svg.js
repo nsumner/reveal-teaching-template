@@ -251,14 +251,14 @@ const animateSVGs = function(deck) {
     }
 
     const body = document.querySelector('body');
-    const currentIndex = deck.getIndices();
+    const currentPath = deck.getSlidePath();
     // There can be either show or hide events for a single update, and
     // we only want to update once, so track the time of the last event
     // to detect and filter duplicates.
-    if (body.lastSVGUpdate === currentIndex) {
+    if (body.lastSVGUpdate === currentPath) {
       return;
     }
-    body.lastSVGUpdate = currentIndex;
+    body.lastSVGUpdate = currentPath;
 
     const figures = new Set(animated.map((fragment) => fragment.parentElement));
     for (const figure of figures) {
