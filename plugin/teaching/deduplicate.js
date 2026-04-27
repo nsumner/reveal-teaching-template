@@ -76,7 +76,7 @@ const rewriteDuplicateIDs = function(idContainer) {
   const duplicateIDs = extractDuplicatedIDs(idContainer);
   const duplicateClasses = extractDuplicatedClasses(idContainer);
 
-  if (duplicateIDs.length === 0 && dupliateClasses.length === 0) {
+  if (duplicateIDs.size === 0 && duplicateClasses.size === 0) {
     return;
   }
 
